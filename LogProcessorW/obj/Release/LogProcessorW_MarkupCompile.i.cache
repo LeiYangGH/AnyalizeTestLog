@@ -4,16 +4,16 @@
 winexe
 C#
 .cs
-C:\G\AnyalizeTestLog-XGroup\LogProcessorW\obj\Release\
+C:\G\AnyalizeTestLog\LogProcessorW\obj\Release\
 LogProcessorW
 none
 false
 TRACE
-C:\G\AnyalizeTestLog-XGroup\LogProcessorW\App.xaml
+C:\G\AnyalizeTestLog\LogProcessorW\App.xaml
 3-1123076840
 11843037503
 191360276441
-18-1693003969
+18-1803069973
 MainWindow.xaml;TestDetailsWindow.xaml;UC4Log.xaml;
 
 False

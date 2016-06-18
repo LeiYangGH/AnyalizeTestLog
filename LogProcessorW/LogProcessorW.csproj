@@ -143,13 +143,14 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\log.png" />
-    <Resource Include="InputLogs\input0.txt" />
-    <Resource Include="InputLogs\input1.txt" />
-    <Resource Include="InputLogs\inputedit.txt" />
-    <Resource Include="InputLogs\inputemptypass.txt" />
-    <Resource Include="InputLogs\inputsubpass.txt" />
-    <Resource Include="InputLogs\input1unicode.txt" />
-    <Resource Include="InputLogs\inputdateorder.txt" />
+    <Resource Include="Requirements\input0.txt" />
+    <Resource Include="Requirements\input1.txt" />
+    <Resource Include="Requirements\inputedit.txt" />
+    <Resource Include="Requirements\inputemptypass.txt" />
+    <Resource Include="Requirements\input1unicode.txt" />
+    <Resource Include="Requirements\inputdateorder.txt" />
+    <Resource Include="Requirements\LogStructure.png" />
+    <Resource Include="Requirements\UI.png" />
     <Content Include="Refdlls\AsyncCtpLibrary.dll" />
   </ItemGroup>
   <ItemGroup />
