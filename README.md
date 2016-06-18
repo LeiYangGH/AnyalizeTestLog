@@ -10,3 +10,5 @@ Howerver, I'm also not familiar with C# file processing especially large file an
 So after trying several times, I finally choosed .net 4.5 Async/Await, compiled Regex, as well as SubString methods.
 I publish this project for other C# newbies to learn, and for senior C# programmers to try better ways,
 both in stability, flexibility, and performance.
+Contact me: 675686066@qq.com
+My homepage: http://www.baidu.com/p/%E9%98%B3%E5%85%89%E7%9A%84%E9%9B%B7%E5%92%A9%E5%92%A9?from=zhidao
