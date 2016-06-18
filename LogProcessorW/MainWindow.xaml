@@ -1,0 +1,60 @@
+﻿<Window x:Class="LogProcessorW.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:log="clr-namespace:LogProcessorW"
+        xmlns:logProp="clr-namespace:LogProcessorW.Properties"
+        Title="Log Processor" Height="550" Width="610"  
+        Loaded="Window_Loaded" Icon="Resources/log.png">
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="MinWidth" Value="70"/>
+            <Setter Property="MinHeight" Value="23"/>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="80"/>
+            <RowDefinition/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Button Name="btnOpen" ToolTip="Choose existing log file to analyze." Command="{Binding OpenCommand}">Open</Button>
+            <TextBlock Name="txtLogFileName" Text="{Binding LogFileName, Mode=OneWay}"
+                     HorizontalAlignment="Center" VerticalAlignment="Center"
+                     Grid.Column="1" Grid.ColumnSpan="2" Margin="2"
+                     ></TextBlock>
+            <Button Name="btnGo" ToolTip="Start reading and extracting tests." Command="{Binding ExtractCommand}" Grid.Row="1">Extract</Button>
+            <Button Name="btnSave" Command="{Binding SaveCommand}"
+                    ToolTip="Save checked tests to a new file."
+                    Grid.Row="1" Grid.Column="2">Save</Button>
+        </Grid>
+        <log:UC4Log Grid.Row="1">
+        </log:UC4Log>
+        <!--<log:UCTreeGrid Grid.Row="1"/>-->
+        <!--<log:UCXceed Grid.Row="1"/>-->
+        <StatusBar MinHeight="20" Grid.Row="2"  HorizontalAlignment="Stretch">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="4*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+            </Grid>
+            <ProgressBar Name="progressBar" Value="{Binding Progress, Mode=OneWay }" MinHeight="10" MinWidth="300" HorizontalAlignment="Stretch"/>
+            <TextBlock Name="txtMsg" Text="{Binding Msg, Mode=OneWay}" Grid.Column="1" MinWidth="100" HorizontalAlignment="Center"/>
+            <TextBlock Name="txtPerf" Text="{Binding Perf, Mode=OneWay}" Grid.Column="2"  MinWidth="100" HorizontalAlignment="Center"/>
+        </StatusBar>
+    </Grid>
+</Window>
