@@ -142,6 +142,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Requirements\LargeLog100M.txt" />
     <Resource Include="Resources\log.png" />
     <Resource Include="Requirements\input0.txt" />
     <Resource Include="Requirements\input1.txt" />

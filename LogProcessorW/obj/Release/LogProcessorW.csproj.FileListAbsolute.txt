@@ -26,3 +26,4 @@ C:\T\AtIntel\AnyalizeTestLog-XGroup\LogProcessorW\obj\Release\LogProcessorW.cspr
 C:\T\AtIntel\AnyalizeTestLog-XGroup\LogProcessorW\obj\Release\LogProcessorW.exe
 C:\T\AtIntel\AnyalizeTestLog-XGroup\LogProcessorW\obj\Release\LogProcessorW.pdb
 C:\T\AtIntel\AnyalizeTestLog-XGroup\LogProcessorW\obj\Release\LogProcessorW.csprojResolveAssemblyReference.cache
+C:\G\AnyalizeTestLog\LogProcessorW\bin\Release\LogProcessorW.exe.config
