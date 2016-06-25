@@ -141,6 +141,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Design\1.main flow.png" />
+    <Resource Include="Design\2.extract one pass.png" />
+    <Resource Include="Design\3.checkanduncheck-pass as example.png" />
     <Content Include="Refdlls\GalaSoft.MvvmLight.dll" />
     <Content Include="Refdlls\Microsoft.Practices.ServiceLocation.dll" />
     <Content Include="Refdlls\System.Windows.Interactivity.dll" />
