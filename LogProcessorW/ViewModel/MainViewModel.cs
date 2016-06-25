@@ -19,7 +19,6 @@ namespace LogProcessorW.ViewModel
 
         #region Fields
 
-        //默认的log文件
         private static string curDir = Environment.CurrentDirectory;
         private long logFileTotalLinesGuess;
         private int readingLinesCount;
@@ -35,6 +34,9 @@ namespace LogProcessorW.ViewModel
             this.LogFileName = Properties.Settings.Default.LastLogFileName;
         }
 
+        /// <summary>
+        /// WPF要求后台的集合类型为ObservableCollection
+        /// </summary>
         private ObservableCollection<PassViewModel> obsPasses;
         public ObservableCollection<PassViewModel> ObsPasses
         {
@@ -264,7 +266,7 @@ namespace LogProcessorW.ViewModel
         }
         #endregion commands
 
-
+        //点击Extract按钮后会触发，整个函数运行完则获取到所有数据并显示
         private async Task<long> Go()
         {
             Stopwatch watch = new Stopwatch();
@@ -277,8 +279,10 @@ namespace LogProcessorW.ViewModel
                 this.UpdateReadProgress(e.Value);
             };
 
+            //主要耗时部分
             var rePasses = await this.ReadLineByLine(readProgress);
 
+            //WPF显示的需要，把List<Pass>转化为ObservableCollection<PassViewModel>
             this.ObsPasses = new ObservableCollection<PassViewModel>(
                 rePasses.Select(x => new PassViewModel(x)));
 
@@ -290,21 +294,22 @@ namespace LogProcessorW.ViewModel
 
 
         #region Read log file
-        /// <summary>
-        /// 按行读取log，遇到]则把之前读的一块拼接起来放入队列
+        /// <summary>IList<Pass>
+        /// 按行读取log，遇到]则把之前读的一块拼接起来，并解析成Pass，最后返回Pass集合
         /// </summary>
         private async Task<IList<Pass>> ReadLineByLine(System.Threading.IProgress<long> progress)
         {
             List<Pass> lst = new List<Pass>();
-            StringBuilder sbLines4Pass = new StringBuilder();
+            StringBuilder sbLines4Pass = new StringBuilder();//用来暂存Pass字符串
             foreach (string line in File.ReadLines(logFileName, Encoding.UTF8))
             {
                 this.readingLinesCount++;
                 if (string.IsNullOrWhiteSpace(line))
                     continue;
                 sbLines4Pass.AppendLine(line);
-                if (line.Contains(Constants.passEndString))
+                if (line.Contains(Constants.passEndString))//如果这行包含了]
                 {
+                    //从这段文本中提取出Pass
                     IList<Pass> passes = await ExtractPassesFromInputByRegex(sbLines4Pass.ToString());
                     lst.AddRange(passes);
                     sbLines4Pass.Clear();
@@ -343,20 +348,31 @@ namespace LogProcessorW.ViewModel
 
         #region Extract pass-test
 
+        /// <summary>
+        /// 从文本中提取Pass
+        /// </summary>
+        /// <param name="input">任意文本，在本程序中为包含（一个）[]的一段文本</param>
+        /// <returns></returns>
         private async Task<IList<Pass>> ExtractPassesFromInputByRegex(string input)
         {
             List<Pass> passes = new List<Pass>();
             await Task.Run(() =>
             {
+                //[在文本中的位置
                 int passStartSymbolLoc = input.IndexOf(Constants.passStartString);
                 if (passStartSymbolLoc > 0)
                 {
+                    //]在文本中的位置
                     int passEndSymbolLoc = input.LastIndexOf(Constants.passEndString);
-                    string g1 = input.Substring(passStartSymbolLoc + 1, 19);
+                    //开始时间文本
+                    string g1 = input.Substring(passStartSymbolLoc + 1, Constants.dateStringLenth);
+                    //中间的文本（包含多个Test）
                     string g2 = input.Substring(passStartSymbolLoc + 1, passEndSymbolLoc - passStartSymbolLoc - 1);
-                    string g3 = input.Substring(passEndSymbolLoc + 1, 19);
-                    Debug.Assert(passStartSymbolLoc > 0, passStartSymbolLoc.ToString());
-                    Debug.Assert(passEndSymbolLoc - passStartSymbolLoc >= Constants.dateStringLenth);
+                    //结束时间文本
+                    string g3 = input.Substring(passEndSymbolLoc + 1, Constants.dateStringLenth);
+                    //下面两句调试用
+                    //Debug.Assert(passStartSymbolLoc > 0, passStartSymbolLoc.ToString());
+                    //Debug.Assert(passEndSymbolLoc - passStartSymbolLoc >= Constants.dateStringLenth);
                     Pass p;
                     if (passEndSymbolLoc - passStartSymbolLoc > Constants.minPassSymbolDistance)
                         p = new Pass(g2, g1, g3);
@@ -386,7 +402,7 @@ namespace LogProcessorW.ViewModel
             {
                 using (StreamWriter sw = new StreamWriter(fileName, false, Encoding.UTF8))
                 {
-                    await WriteCheckedTests(sw);
+                    await WriteCheckedPasses(sw);
                 }
             }
             catch (Exception ex)
@@ -397,18 +413,25 @@ namespace LogProcessorW.ViewModel
             return fileName;
         }
 
-        private async Task WriteCheckedTests(StreamWriter sw)
+        /// <summary>
+        /// 保存勾选的Passes,连带保存勾选的Tests
+        /// </summary>
+        /// <param name="sw"></param>
+        /// <returns></returns>
+        private async Task WriteCheckedPasses(StreamWriter sw)
         {
             await Task.Run(() =>
             {
                 foreach (PassViewModel passVM in this.ObsPasses)
                 {
+                    //如果去掉这个if，则不管是否勾选Pass都会保存
                     if (passVM.IsChecked ?? false)
                     {
                         Pass p = passVM.pass;
+                        //如果去掉.Where(x => x.IsChecked ?? false)，不管是否勾选Test都会保存
                         p.ListTests = passVM.ObsTests.Where(x => x.IsChecked ?? false)
                             .Select(x => x.test).ToList();
-                        sw.WriteLine(p);
+                        sw.WriteLine(p.ToString());
                     }
                 }
             });

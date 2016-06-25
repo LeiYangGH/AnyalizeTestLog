@@ -18,6 +18,10 @@ namespace LogProcessor
         public string Status;
         public string SN;
         private string testText;
+        /// <summary>
+        /// 通过包含Test的文本解析出Test对象
+        /// </summary>
+        /// <param name="testText">包含Test的文本</param>
         public Test(string testText)
         {
             this.testText = testText;
@@ -82,7 +86,7 @@ namespace LogProcessor
         }
 
         /// <summary>
-        /// 调试用
+        /// 点击raw或者保存时Test的内容，可以改变return内容来测试
         /// </summary>
         /// <returns></returns>
         public override string ToString()
