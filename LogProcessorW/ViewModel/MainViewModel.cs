@@ -22,7 +22,7 @@ namespace LogProcessorW.ViewModel
 
         private static string curDir = Environment.CurrentDirectory;
         private long logFileTotalLinesGuess;
-        private int readingLinesCount;
+        private long readingLinesCount;
 
         #endregion Fields
 
@@ -286,7 +286,7 @@ namespace LogProcessorW.ViewModel
             //WPF显示的需要，把List<Pass>转化为ObservableCollection<PassViewModel>
             this.ObsPasses = new ObservableCollection<PassViewModel>(
                 rePasses.Select(x => new PassViewModel(x)));
-
+            //.AsParallel()//seems no use
             this.RaisePropertyChanged(() => this.PassesCntMsg);
 
             watch.Stop();
@@ -311,7 +311,7 @@ namespace LogProcessorW.ViewModel
                 if (line.Contains(Constants.passEndString))//如果这行包含了]
                 {
                     //从这段文本中提取出Pass
-                    IList<Pass> passes = await ExtractPassesFromInputByRegex(sbLines4Pass.ToString());
+                    IList<Pass> passes = await ExtractPassesFromInputBySubString(sbLines4Pass.ToString());
                     lst.AddRange(passes);
                     sbLines4Pass.Clear();
                     if (progress != null)
@@ -354,14 +354,14 @@ namespace LogProcessorW.ViewModel
         /// </summary>
         /// <param name="input">任意文本，在本程序中为包含（一个）[]的一段文本</param>
         /// <returns></returns>
-        private async Task<IList<Pass>> ExtractPassesFromInputByRegex(string input)
+        private async Task<IList<Pass>> ExtractPassesFromInputBySubString(string input)
         {
             List<Pass> passes = new List<Pass>();
             await Task.Run(() =>
             {
                 //[在文本中的位置
                 int passStartSymbolLoc = input.IndexOf(Constants.passStartString);
-                if (passStartSymbolLoc > 0)
+                if (passStartSymbolLoc > 0)//文件不规范必须判断，有]不一定有[
                 {
                     //]在文本中的位置
                     int passEndSymbolLoc = input.LastIndexOf(Constants.passEndString);

@@ -37,7 +37,7 @@ namespace LogProcessor
 
             this.StartDate = DateTime.ParseExact(this.StartDateString, Constants.dateFormatString,
                 CultureInfo.InvariantCulture);
-            Debug.Assert(this.StartDate != null && this.StartDate != new DateTime());
+            //Debug.Assert(this.StartDate != null && this.StartDate != new DateTime());
             //使用@拆分出各个Pass
             passText.Split(new string[] { Constants.at }, StringSplitOptions.RemoveEmptyEntries)
     .Where(x => x.Length > 30).AsParallel().ForAll((x) =>

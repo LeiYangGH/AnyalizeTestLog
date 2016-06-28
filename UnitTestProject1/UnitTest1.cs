@@ -7,6 +7,7 @@ using System.Linq;
 using LogProcessor;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using System.Diagnostics;
 namespace UnitTestProject1
 {
     [TestClass]
@@ -15,6 +16,22 @@ namespace UnitTestProject1
         //string logFileName = Path.Combine(Environment.CurrentDirectory, @"input0.txt");
         string logFileName = Path.Combine(Environment.CurrentDirectory, @"input1.txt");
         //string logFileName = Path.Combine(Environment.CurrentDirectory, @"inputsubpass.txt");
+
+        [TestMethod]
+        public void TestConstructListPerf()
+        {
+            List<string> lst=new List<string>(Enumerable.Range(1,10000000).Select(x=>x.ToString()));
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            //List<string> lst1 = new List<string>(lst);//22
+            //List<string> lst1 = new List<string>();
+            lst.AsParallel().ForAll((x) =>
+            {
+                lst1.Add(x);
+            });
+            sw.Stop();
+            Console.WriteLine(sw.ElapsedMilliseconds);
+        }
 
         [TestMethod]
         public void TestListViewItemParent()

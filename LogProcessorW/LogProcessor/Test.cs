@@ -25,11 +25,33 @@ namespace LogProcessor
         public Test(string testText)
         {
             this.testText = testText;
-            this.DateString = this.ExtractDatetimeFormATest();
+            //this.DateString = this.ExtractDatetimeFormATest();
+            //this.Date = DateTime.ParseExact(this.DateString, Constants.dateFormatString,
+            //             CultureInfo.InvariantCulture);
+            //this.Status = this.ExtractStatusFormATest();
+            //this.SN = Test.ExtractSNFormATest(this.testText);
+            //减少函数调用，一定程度提高了性能
+            this.DateString = this.testText.Substring(0, Constants.dateStringLenth);
             this.Date = DateTime.ParseExact(this.DateString, Constants.dateFormatString,
                          CultureInfo.InvariantCulture);
-            this.Status = this.ExtractStatusFormATest();
-            this.SN = Test.ExtractSNFormATest(this.testText);
+            if (this.testText.Contains(Constants.passSymbol))
+                this.Status = Constants.passCharString;
+            else if (this.testText.Contains(Constants.errorSymbol))
+                this.Status = Constants.errorCharString;
+            else if (this.testText.Contains(Constants.failSymbol))
+                this.Status = Constants.failCharString;
+            else
+                this.Status = "";
+            //try catch也去掉对100M日志没报错
+            //@26-FEB-16  14:45:13 SN SS160605E
+            string line0 = this.testText.Substring(0, this.testText.IndexOf(Environment.NewLine));
+            int locSN = line0.LastIndexOf(Constants.SN);
+            string sn = "";
+            if (locSN > 0)
+            {
+                sn = line0.Substring(locSN + 2);
+            }
+            this.SN = sn;
         }
 
         /// <summary>
@@ -40,7 +62,7 @@ namespace LogProcessor
         {
             //@26-FEB-16  14:12:16
             string dateString = this.testText.Substring(0, Constants.dateStringLenth);
-            Debug.Assert(Constants.regFindDatetime.IsMatch(dateString));
+            //Debug.Assert(Constants.regFindDatetime.IsMatch(dateString));
             return dateString;
         }
 
