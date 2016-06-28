@@ -10,7 +10,7 @@ namespace LogProcessor
     public static class Constants
     {
         public const int dateStringLenth = 19;
-        public const int minPassSymbolDistance = dateStringLenth + 3;
+        public const int minPassSymbolDistance = 22;
         public const double fileLenth2LinesRate = 108792831d / 4224929d;
         public const string passStartString = "[";
         public const string passEndString = "]";
@@ -24,12 +24,11 @@ namespace LogProcessor
         public const string SN = @"SN";
         public const string dateFormatString = @"dd-MMM-yy  HH:mm:ss";
         public const string logExtFilter = @"log|*.log|txt|*.txt";
-        public const string datePatternString = @"[0-3]\d-(?:JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC)-1[67]  [012]\d:[0-5]\d:[0-5]\d";
-
-        public static string strRegFindPasses = string.Format(@"\[({0})([\s\S]*)]({0})", datePatternString);
-        public static string strRegExtractSN = string.Format(@"{0} SN ([A-Z\d]+)\b", datePatternString);
-
-        public static Regex regFindPasses = new Regex(strRegFindPasses, RegexOptions.Compiled);
-        public static Regex regFindDatetime = new Regex(datePatternString, RegexOptions.Compiled);
+        //currently Regex not used
+        //public const string datePatternString = @"[0-3]\d-(?:JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC)-1[67]  [012]\d:[0-5]\d:[0-5]\d";
+        //public static string strRegFindPasses = string.Format(@"\[({0})([\s\S]*)]({0})", datePatternString);
+        //public static string strRegExtractSN = string.Format(@"{0} SN ([A-Z\d]+)\b", datePatternString);
+        //public static Regex regFindPasses = new Regex(strRegFindPasses, RegexOptions.Compiled);
+        //public static Regex regFindDatetime = new Regex(datePatternString, RegexOptions.Compiled);
     }
 }

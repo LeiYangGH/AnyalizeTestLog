@@ -18,22 +18,6 @@ namespace UnitTestProject1
         //string logFileName = Path.Combine(Environment.CurrentDirectory, @"inputsubpass.txt");
 
         [TestMethod]
-        public void TestConstructListPerf()
-        {
-            List<string> lst=new List<string>(Enumerable.Range(1,10000000).Select(x=>x.ToString()));
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
-            //List<string> lst1 = new List<string>(lst);//22
-            //List<string> lst1 = new List<string>();
-            lst.AsParallel().ForAll((x) =>
-            {
-                lst1.Add(x);
-            });
-            sw.Stop();
-            Console.WriteLine(sw.ElapsedMilliseconds);
-        }
-
-        [TestMethod]
         public void TestListViewItemParent()
         {
             ListView lvw = new ListView();
@@ -60,21 +44,21 @@ namespace UnitTestProject1
             Assert.AreEqual(0.5, re);
         }
 
-        [TestMethod]
-        public void TestMatchPassAndDate()
-        {
-            bool b = Constants.regFindPasses.IsMatch(onePassText);
-            Assert.AreEqual(true, b);
+        //[TestMethod]
+        //public void TestMatchPassAndDate()
+        //{
+        //    bool b = Constants.regFindPasses.IsMatch(onePassText);
+        //    Assert.AreEqual(true, b);
 
-            foreach (Match m in Constants.regFindPasses.Matches(onePassText))
-            {
-                Console.WriteLine("group1 = {0}", m.Groups[1].Value);
-                Console.WriteLine("group3 = {0}", m.Groups[3].Value);
-                //Console.WriteLine("group2 = {0}", m.Groups[2].Value);
-                Assert.AreEqual("26-FEB-16  14:10:50", m.Groups[1].Value);
-                Assert.AreEqual("26-FEB-16  14:52:14", m.Groups[3].Value);
-            }
-        }
+        //    foreach (Match m in Constants.regFindPasses.Matches(onePassText))
+        //    {
+        //        Console.WriteLine("group1 = {0}", m.Groups[1].Value);
+        //        Console.WriteLine("group3 = {0}", m.Groups[3].Value);
+        //        //Console.WriteLine("group2 = {0}", m.Groups[2].Value);
+        //        Assert.AreEqual("26-FEB-16  14:10:50", m.Groups[1].Value);
+        //        Assert.AreEqual("26-FEB-16  14:52:14", m.Groups[3].Value);
+        //    }
+        //}
 
         [TestMethod]
         public void TestMatchSN()

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
@@ -17,12 +16,12 @@ namespace LogProcessorW.ViewModel
 {
     public class MainViewModel : ViewModelBase
     {
-
         #region Fields
-
         private static string curDir = Environment.CurrentDirectory;
         private long logFileTotalLinesGuess;
         private long readingLinesCount;
+        private bool readDone = false;
+        private ConcurrentQueue<string> queue = new ConcurrentQueue<string>();
 
         #endregion Fields
 
@@ -280,13 +279,17 @@ namespace LogProcessorW.ViewModel
                 this.UpdateReadProgress(e.Value);
             };
 
+            //bool readAgain = this.ObsPasses.Count > 0;
+
             //主要耗时部分
-            var rePasses = await this.ReadLineByLine(readProgress);
+            var bagPasses = await this.ReadAndExtractPasses(readProgress);
 
             //WPF显示的需要，把List<Pass>转化为ObservableCollection<PassViewModel>
             this.ObsPasses = new ObservableCollection<PassViewModel>(
-                rePasses.Select(x => new PassViewModel(x)));
-            //.AsParallel()//seems no use
+                bagPasses.AsParallel().Select(x => new PassViewModel(x)));
+
+
+
             this.RaisePropertyChanged(() => this.PassesCntMsg);
 
             watch.Stop();
@@ -298,10 +301,12 @@ namespace LogProcessorW.ViewModel
         /// <summary>IList<Pass>
         /// 按行读取log，遇到]则把之前读的一块拼接起来，并解析成Pass，最后返回Pass集合
         /// </summary>
-        private async Task<IList<Pass>> ReadLineByLine(System.Threading.IProgress<long> progress)
+        private void ReadFileToQueue(System.Threading.IProgress<long> progress)
         {
-            List<Pass> lst = new List<Pass>();
+            this.queue = new ConcurrentQueue<string>();
+            this.readDone = false;
             StringBuilder sbLines4Pass = new StringBuilder();//用来暂存Pass字符串
+            string passStr = null;
             foreach (string line in File.ReadLines(logFileName, Encoding.UTF8))
             {
                 this.readingLinesCount++;
@@ -310,15 +315,70 @@ namespace LogProcessorW.ViewModel
                 sbLines4Pass.AppendLine(line);
                 if (line.Contains(Constants.passEndString))//如果这行包含了]
                 {
-                    //从这段文本中提取出Pass
-                    IList<Pass> passes = await ExtractPassesFromInputBySubString(sbLines4Pass.ToString());
-                    lst.AddRange(passes);
+                    passStr = sbLines4Pass.ToString();
+                    if (passStr.Contains(Constants.passStartString))//log文件有不严格的[]匹配
+                        queue.Enqueue(passStr);
                     sbLines4Pass.Clear();
                     if (progress != null)
                         progress.Report(this.readingLinesCount);
                 }
             }
-            return lst;
+            this.readDone = true;
+        }
+
+        private ConcurrentBag<Pass> ExtractPassesFromQueue()
+        {
+            ConcurrentBag<Pass> bagPasses = new ConcurrentBag<Pass>();
+            string passStr;
+
+            while (!this.readDone)
+            {
+                while (!this.queue.IsEmpty)
+                {
+                    if (this.queue.TryDequeue(out passStr))
+                    {
+                        Pass pass = this.ExtractPassesFromInputBySubString(passStr);
+                        bagPasses.Add(pass);
+                    }
+                }
+                //是否需要Sleep？
+            }
+
+            while (!this.queue.IsEmpty)
+            {
+                if (this.queue.TryDequeue(out passStr))
+                {
+                    Pass pass = this.ExtractPassesFromInputBySubString(passStr);
+                    bagPasses.Add(pass);
+                }
+            }
+            return bagPasses;
+        }
+
+        /// <summary>
+        /// 按行读取log，遇到]则把之前读的一块拼接起来，并解析成Pass，最后返回Pass集合
+        /// </summary>
+        /// <param name="progress">进度</param>
+        /// <returns>Pass集合</returns>
+        private async Task<ConcurrentBag<Pass>> ReadAndExtractPasses(System.Threading.IProgress<long> progress)
+        {
+            ConcurrentBag<Pass> bagsPasses = null;
+
+            await Task.Run(() =>
+             {
+                 var read = Task.Run(() =>
+                 {
+                     ReadFileToQueue(progress);
+                 });
+                 //会不会有t1没运行t2就结束的情况？
+                 var extract = Task.Run(() =>
+                 {
+                     bagsPasses = ExtractPassesFromQueue();
+                 });
+                 Task.WaitAll(new Task[] { read, extract });
+             });
+            return bagsPasses;
+
         }
         #endregion Read log file
 
@@ -354,35 +414,29 @@ namespace LogProcessorW.ViewModel
         /// </summary>
         /// <param name="input">任意文本，在本程序中为包含（一个）[]的一段文本</param>
         /// <returns></returns>
-        private async Task<IList<Pass>> ExtractPassesFromInputBySubString(string input)
+        private Pass ExtractPassesFromInputBySubString(string input)
         {
-            List<Pass> passes = new List<Pass>();
-            await Task.Run(() =>
-            {
-                //[在文本中的位置
-                int passStartSymbolLoc = input.IndexOf(Constants.passStartString);
-                if (passStartSymbolLoc > 0)//文件不规范必须判断，有]不一定有[
-                {
-                    //]在文本中的位置
-                    int passEndSymbolLoc = input.LastIndexOf(Constants.passEndString);
-                    //开始时间文本
-                    string g1 = input.Substring(passStartSymbolLoc + 1, Constants.dateStringLenth);
-                    //中间的文本（包含多个Test）
-                    string g2 = input.Substring(passStartSymbolLoc + 1, passEndSymbolLoc - passStartSymbolLoc - 1);
-                    //结束时间文本
-                    string g3 = input.Substring(passEndSymbolLoc + 1, Constants.dateStringLenth);
-                    //下面两句调试用
-                    //Debug.Assert(passStartSymbolLoc > 0, passStartSymbolLoc.ToString());
-                    //Debug.Assert(passEndSymbolLoc - passStartSymbolLoc >= Constants.dateStringLenth);
-                    Pass p;
-                    if (passEndSymbolLoc - passStartSymbolLoc > Constants.minPassSymbolDistance)
-                        p = new Pass(g2, g1, g3);
-                    else//[]之间没有@的空Pass
-                        p = new EmptyPass(input, g1, g3);
-                    passes.Add(p);
-                }
-            });
-            return passes;
+            Pass p = null;
+
+            //[在文本中的位置
+            int passStartSymbolLoc = input.IndexOf(Constants.passStartString);
+            //]在文本中的位置
+            int passEndSymbolLoc = input.LastIndexOf(Constants.passEndString);
+            //开始时间文本
+            string sdt = input.Substring(passStartSymbolLoc + 1, Constants.dateStringLenth);
+            //中间的文本（包含多个Test）
+            string tests = input.Substring(passStartSymbolLoc + 1, passEndSymbolLoc - passStartSymbolLoc - 1);
+            //结束时间文本
+            string edt = input.Substring(passEndSymbolLoc + 1, Constants.dateStringLenth);
+            //下面两句调试用
+            //Debug.Assert(passStartSymbolLoc > 0, passStartSymbolLoc.ToString());
+            //Debug.Assert(passEndSymbolLoc - passStartSymbolLoc >= Constants.dateStringLenth);
+            if (passEndSymbolLoc - passStartSymbolLoc > Constants.minPassSymbolDistance)
+                p = new Pass(tests, sdt, edt);
+            else//[]之间没有@的空Pass
+                p = new EmptyPass(tests, sdt, edt);
+            return p;
+
         }
         #endregion Extract pass-test
 
