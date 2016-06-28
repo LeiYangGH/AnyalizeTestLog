@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace LogProcessor
 {
@@ -15,7 +17,7 @@ namespace LogProcessor
     {
         public string StartDateString;
         public string EndDate;
-        public IList<Test> ListTests = new List<Test>();
+        public ConcurrentBag<Test> BagTests = new ConcurrentBag<Test>();
         public DateTime StartDate;//用来排序的时间
 
         /// <summary>
@@ -37,14 +39,13 @@ namespace LogProcessor
                 CultureInfo.InvariantCulture);
             Debug.Assert(this.StartDate != null && this.StartDate != new DateTime());
             //使用@拆分出各个Pass
-            foreach (string test in passText.Split(new string[] { Constants.at },
-                StringSplitOptions.RemoveEmptyEntries))
+            var tests = passText.Split(new string[] { Constants.at },
+     StringSplitOptions.RemoveEmptyEntries).Where(x => x.Length > 30).ToArray();
+            Parallel.For(0, tests.Length - 1, x =>
             {
-                if (test.Length < 30)//去掉拆分出来的垃圾段
-                    continue;
-                Test t = new Test(test);
-                this.ListTests.Add(t);
-            }
+                Test t = new Test(tests[x]);
+                this.BagTests.Add(t);
+            });
         }
 
         /// <summary>
@@ -61,7 +62,7 @@ namespace LogProcessor
             sb.Append(Constants.passStartString);
             sb.AppendLine(this.StartDateString);
             sb.Append(Constants.at);
-            sb.Append(string.Join(Constants.at, this.ListTests));
+            sb.Append(string.Join(Constants.at, this.BagTests));
             sb.Append(Constants.passEndString);
             sb.Append(this.EndDate);
             sb.AppendLine();

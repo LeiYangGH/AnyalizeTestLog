@@ -12,6 +12,7 @@ using Microsoft.Win32;
 using System.Diagnostics;
 using System.Threading;
 using System.Windows;
+using System.Collections.Concurrent;
 namespace LogProcessorW.ViewModel
 {
     public class MainViewModel : ViewModelBase
@@ -429,8 +430,8 @@ namespace LogProcessorW.ViewModel
                     {
                         Pass p = passVM.pass;
                         //如果去掉.Where(x => x.IsChecked ?? false)，不管是否勾选Test都会保存
-                        p.ListTests = passVM.ObsTests.Where(x => x.IsChecked ?? false)
-                            .Select(x => x.test).ToList();
+                        p.BagTests = new ConcurrentBag<Test>(passVM.ObsTests.Where(x => x.IsChecked ?? false)
+                            .Select(x => x.test));
                         sw.WriteLine(p.ToString());
                     }
                 }
