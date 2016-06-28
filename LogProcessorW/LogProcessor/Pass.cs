@@ -39,13 +39,12 @@ namespace LogProcessor
                 CultureInfo.InvariantCulture);
             Debug.Assert(this.StartDate != null && this.StartDate != new DateTime());
             //使用@拆分出各个Pass
-            var tests = passText.Split(new string[] { Constants.at },
-     StringSplitOptions.RemoveEmptyEntries).Where(x => x.Length > 30).ToArray();
-            Parallel.For(0, tests.Length - 1, x =>
+            foreach (Test t in passText.Split(new string[] { Constants.at }, StringSplitOptions.RemoveEmptyEntries)
+                .Where(x => x.Length > 30)
+                .AsParallel().Select(x => new Test(x)))
             {
-                Test t = new Test(tests[x]);
                 this.BagTests.Add(t);
-            });
+            };
         }
 
         /// <summary>
