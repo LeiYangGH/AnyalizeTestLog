@@ -12,6 +12,7 @@ using System.Diagnostics;
 using System.Threading;
 using System.Windows;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 namespace LogProcessorW.ViewModel
 {
     public class MainViewModel : ViewModelBase
@@ -280,11 +281,11 @@ namespace LogProcessorW.ViewModel
             };
 
             //主要耗时部分
-            var bagPasses = await this.ReadAndExtractPasses(readProgress);
+            var Passes = await this.ReadAndExtractPasses(readProgress);
 
             //WPF显示的需要，把List<Pass>转化为ObservableCollection<PassViewModel>
             this.ObsPasses = new ObservableCollection<PassViewModel>(
-                bagPasses.AsParallel().Select(x => new PassViewModel(x)));
+                Passes.AsParallel().Select(x => new PassViewModel(x)));
 
 
 
@@ -324,9 +325,9 @@ namespace LogProcessorW.ViewModel
             this.readDone = true;
         }
 
-        private ConcurrentBag<Pass> ExtractPassesFromQueue()
+        private IList<Pass> ExtractPassesFromQueue()
         {
-            ConcurrentBag<Pass> bagPasses = new ConcurrentBag<Pass>();
+            List<Pass> listPasses = new List<Pass>();
             string passStr;
 
             while (!this.readDone)
@@ -334,7 +335,7 @@ namespace LogProcessorW.ViewModel
                 if (this.queue.TryDequeue(out passStr))
                 {
                     Pass pass = this.ExtractPassesFromInputBySubString(passStr);
-                    bagPasses.Add(pass);
+                    listPasses.Add(pass);
                 }
                 //是否需要Sleep？
             }
@@ -344,10 +345,10 @@ namespace LogProcessorW.ViewModel
                 if (this.queue.TryDequeue(out passStr))
                 {
                     Pass pass = this.ExtractPassesFromInputBySubString(passStr);
-                    bagPasses.Add(pass);
+                    listPasses.Add(pass);
                 }
             }
-            return bagPasses;
+            return listPasses;
         }
 
         /// <summary>
@@ -355,9 +356,9 @@ namespace LogProcessorW.ViewModel
         /// </summary>
         /// <param name="progress">进度</param>
         /// <returns>Pass集合</returns>
-        private async Task<ConcurrentBag<Pass>> ReadAndExtractPasses(System.Threading.IProgress<long> progress)
+        private async Task<IList<Pass>> ReadAndExtractPasses(System.Threading.IProgress<long> progress)
         {
-            ConcurrentBag<Pass> bagsPasses = null;
+            IList<Pass> lstPasses = null;
 
             await Task.Run(() =>
              {
@@ -368,11 +369,11 @@ namespace LogProcessorW.ViewModel
                  //会不会有t1没运行t2就结束的情况？
                  var extract = Task.Run(() =>
                  {
-                     bagsPasses = ExtractPassesFromQueue();
+                     lstPasses = ExtractPassesFromQueue();
                  });
                  Task.WaitAll(new Task[] { read, extract });
              });
-            return bagsPasses;
+            return lstPasses;
 
         }
         #endregion Read log file
