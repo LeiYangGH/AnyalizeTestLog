@@ -285,9 +285,7 @@ namespace LogProcessorW.ViewModel
 
             //WPF显示的需要，把List<Pass>转化为ObservableCollection<PassViewModel>
             this.ObsPasses = new ObservableCollection<PassViewModel>(
-                Passes.AsParallel().Select(x => new PassViewModel(x)));
-
-
+                Passes.OrderBy(x => x.StartDate).Select(x => new PassViewModel(x)));
 
             this.RaisePropertyChanged(() => this.PassesCntMsg);
 
@@ -480,7 +478,7 @@ namespace LogProcessorW.ViewModel
                     {
                         Pass p = passVM.pass;
                         //如果去掉.Where(x => x.IsChecked ?? false)，不管是否勾选Test都会保存
-                        p.BagTests = new ConcurrentBag<Test>(passVM.ObsTests.Where(x => x.IsChecked ?? false)
+                        p.listTests = new List<Test>(passVM.ObsTests.Where(x => x.IsChecked ?? false)
                             .Select(x => x.test));
                         sw.WriteLine(p.ToString());
                     }

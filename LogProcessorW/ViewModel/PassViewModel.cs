@@ -18,7 +18,7 @@ namespace LogProcessorW.ViewModel
             this.StartDate = pass.StartDate;
             this.EndDate = pass.EndDate;
             this.ObsTests = new ObservableCollection<TestViewModel>(
-               pass.BagTests.OrderBy(x => x.Date).Select(x => new TestViewModel(x, this)));
+               pass.listTests.Select(x => new TestViewModel(x)));
             this.HasTests = this.obsTests.Count > 0;
             MessengerInstance.Register<TestViewModel>(this, (t) =>
             {

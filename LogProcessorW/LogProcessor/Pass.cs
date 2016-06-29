@@ -17,7 +17,7 @@ namespace LogProcessor
     {
         public string StartDateString;
         public string EndDate;
-        public ConcurrentBag<Test> BagTests = new ConcurrentBag<Test>();
+        public List<Test> listTests = new List<Test>();
         public DateTime StartDate;//用来排序的时间
 
         /// <summary>
@@ -30,7 +30,6 @@ namespace LogProcessor
         {
             this.StartDateString = sdt;
             this.EndDate = edt;
-
             //only for emptypass
             if (string.IsNullOrWhiteSpace(passText))
                 return;
@@ -39,11 +38,10 @@ namespace LogProcessor
                 CultureInfo.InvariantCulture);
             //Debug.Assert(this.StartDate != null && this.StartDate != new DateTime());
             //使用@拆分出各个Pass
-            passText.Split(new string[] { Constants.at }, StringSplitOptions.RemoveEmptyEntries)
-    .Where(x => x.Length > 30).AsParallel().ForAll((x) =>
-    {
-        this.BagTests.Add(new Test(x));
-    });
+            this.listTests = passText.Split(new string[] { Constants.at }, 
+                StringSplitOptions.RemoveEmptyEntries)
+                .Where(x => x.Length > 30).Select(x => new Test(x))
+                .OrderBy(x => x.Date).ToList();
         }
 
         /// <summary>
@@ -60,7 +58,7 @@ namespace LogProcessor
             sb.Append(Constants.passStartString);
             sb.AppendLine(this.StartDateString);
             sb.Append(Constants.at);
-            sb.Append(string.Join(Constants.at, this.BagTests));
+            sb.Append(string.Join(Constants.at, this.listTests));
             sb.Append(Constants.passEndString);
             sb.Append(this.EndDate);
             sb.AppendLine();

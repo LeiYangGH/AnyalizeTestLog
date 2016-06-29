@@ -64,11 +64,6 @@
                     raw</Hyperlink></TextBlock>
             </Grid>
         </DataTemplate>
-        <CollectionViewSource x:Key="cvs" Source="{Binding ObsPasses, Mode=OneWay}">
-            <CollectionViewSource.SortDescriptions>
-                <scm:SortDescription PropertyName="StartDate"/>
-            </CollectionViewSource.SortDescriptions>
-        </CollectionViewSource>
     </UserControl.Resources>
     <DockPanel>
         <!--Header-->
@@ -91,7 +86,8 @@
 
         <Grid>
             <ScrollViewer VerticalScrollBarVisibility="Auto">
-                <ItemsControl ItemsSource="{Binding Source={StaticResource cvs}, Mode=OneWay, IsAsync=True}"
+                <!---->
+                <ItemsControl ItemsSource="{Binding ObsPasses, Mode=OneWay, IsAsync=True}"
                               VirtualizingPanel.IsVirtualizing="True">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate DataType="vm:PassViewModel">
@@ -115,7 +111,7 @@
                                     </Grid>
                                 </Expander.Header>
                                 <Expander.Content>
-                                    <ItemsControl ItemsSource="{Binding ObsTests, Mode=OneTime, IsAsync=True}" Margin="2"
+                <ItemsControl ItemsSource="{Binding ObsTests, Mode=OneTime, IsAsync=True}" Margin="2"
                                              Focusable="False" ItemTemplate="{StaticResource TestTemplate}"
                                           >
                                         <i:Interaction.Behaviors>

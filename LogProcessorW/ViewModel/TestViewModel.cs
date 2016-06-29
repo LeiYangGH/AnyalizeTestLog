@@ -10,7 +10,7 @@ namespace LogProcessorW.ViewModel
     {
         public readonly Test test;
 
-        public TestViewModel(Test test, PassViewModel passVM)
+        public TestViewModel(Test test)
         {
             this.test = test;
             this.IsChecked = true;
