@@ -366,6 +366,7 @@ namespace LogProcessorW.ViewModel
                      ReadFileToQueue(progress);
                  });
                  //会不会有t1没运行t2就结束的情况？
+                 Thread.Sleep(15);
                  var extract = Task.Run(() =>
                  {
                      lstPasses = ExtractPassesFromQueue();
