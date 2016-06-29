@@ -307,8 +307,9 @@ namespace LogProcessorW.ViewModel
             foreach (string line in File.ReadLines(logFileName, Encoding.UTF8))
             {
                 this.readingLinesCount++;
-                if (string.IsNullOrWhiteSpace(line))
-                    continue;
+                //根据要求保留空行
+                //if (string.IsNullOrWhiteSpace(line))
+                //    continue;
                 sbLines4Pass.AppendLine(line);
                 if (line.Contains(Constants.passEndString))//如果这行包含了]
                 {
@@ -416,19 +417,21 @@ namespace LogProcessorW.ViewModel
             int passStartSymbolLoc = input.IndexOf(Constants.passStartString);
             //]在文本中的位置
             int passEndSymbolLoc = input.LastIndexOf(Constants.passEndString);
-            //开始时间文本
-            string sdt = input.Substring(passStartSymbolLoc + 1, Constants.dateStringLenth);
             //中间的文本（包含多个Test）
             string tests = input.Substring(passStartSymbolLoc + 1, passEndSymbolLoc - passStartSymbolLoc - 1);
+            //第一行包含S的文本
+            string line0S = input.Substring(0, passStartSymbolLoc);
+            //开始时间文本
+            string sdt = input.Substring(passStartSymbolLoc + 1, Constants.dateStringLenth);
             //结束时间文本
             string edt = input.Substring(passEndSymbolLoc + 1, Constants.dateStringLenth);
             //下面两句调试用
             //Debug.Assert(passStartSymbolLoc > 0, passStartSymbolLoc.ToString());
             //Debug.Assert(passEndSymbolLoc - passStartSymbolLoc >= Constants.dateStringLenth);
             if (passEndSymbolLoc - passStartSymbolLoc > Constants.minPassSymbolDistance)
-                p = new Pass(tests, sdt, edt);
+                p = new Pass(tests, line0S, sdt, edt);
             else//[]之间没有@的空Pass
-                p = new EmptyPass(tests, sdt, edt);
+                p = new EmptyPass(tests, line0S, sdt, edt);
             return p;
 
         }

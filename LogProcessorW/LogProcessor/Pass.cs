@@ -15,6 +15,7 @@ namespace LogProcessor
     /// </summary>
     public class Pass
     {
+        protected string Line0S;
         public string StartDateString;
         public string EndDate;
         public List<Test> listTests = new List<Test>();
@@ -23,25 +24,26 @@ namespace LogProcessor
         /// <summary>
         /// 根据传进来的一段文本解析Pass
         /// </summary>
-        /// <param name="passText">包含若干Tests的那段文本</param>
+        /// <param name="testsText">包含若干Tests的那段文本</param>
         /// <param name="sdt">开始日期文本</param>
         /// <param name="edt">结束日期文本</param>
-        public Pass(string passText, string sdt, string edt)
+        public Pass(string testsText, string line0S, string sdt, string edt)
         {
+            this.Line0S = line0S;
             this.StartDateString = sdt;
             this.EndDate = edt;
             //only for emptypass
-            if (string.IsNullOrWhiteSpace(passText))
+            if (string.IsNullOrWhiteSpace(testsText))
                 return;
 
             this.StartDate = DateTime.ParseExact(this.StartDateString, Constants.dateFormatString,
                 CultureInfo.InvariantCulture);
             //Debug.Assert(this.StartDate != null && this.StartDate != new DateTime());
             //使用@拆分出各个Pass
-            this.listTests = passText.Split(new string[] { Constants.at }, 
+            this.listTests = testsText.Split(new string[] { Constants.at },
                 StringSplitOptions.RemoveEmptyEntries)
                 .Where(x => x.Length > 30).Select(x => new Test(x))
-                .OrderBy(x => x.Date).ToList();
+                .OrderBy(x => x.Status).ThenBy(x => x.Date).ToList();
         }
 
         /// <summary>
@@ -55,6 +57,7 @@ namespace LogProcessor
 
             //如果非空，通过Pass的日期、Tests的内容来组合成整体Pass文本
             StringBuilder sb = new StringBuilder();
+            sb.Append(this.Line0S);
             sb.Append(Constants.passStartString);
             sb.AppendLine(this.StartDateString);
             sb.Append(Constants.at);
@@ -69,17 +72,19 @@ namespace LogProcessor
 
     public class EmptyPass : Pass
     {
-        private string passEmptyText;
-
-        public EmptyPass(string passText, string sdt, string edt)
-            : base(null, sdt, edt)
-        {
-            this.passEmptyText = passText;
-        }
+        public EmptyPass(string testsText, string line0S, string sdt, string edt)
+            : base(null, line0S, sdt, edt) { }
 
         public override string ToString()
         {
-            return this.passEmptyText;
+            StringBuilder sb = new StringBuilder();
+            sb.Append(this.Line0S);
+            sb.Append(Constants.passStartString);
+            sb.AppendLine(this.StartDateString);
+            sb.Append(Constants.passEndString);
+            sb.Append(this.EndDate);
+            sb.AppendLine();
+            return sb.ToString();
         }
     }
 }
