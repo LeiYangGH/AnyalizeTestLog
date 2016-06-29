@@ -279,8 +279,6 @@ namespace LogProcessorW.ViewModel
                 this.UpdateReadProgress(e.Value);
             };
 
-            //bool readAgain = this.ObsPasses.Count > 0;
-
             //主要耗时部分
             var bagPasses = await this.ReadAndExtractPasses(readProgress);
 
@@ -333,13 +331,10 @@ namespace LogProcessorW.ViewModel
 
             while (!this.readDone)
             {
-                while (!this.queue.IsEmpty)
+                if (this.queue.TryDequeue(out passStr))
                 {
-                    if (this.queue.TryDequeue(out passStr))
-                    {
-                        Pass pass = this.ExtractPassesFromInputBySubString(passStr);
-                        bagPasses.Add(pass);
-                    }
+                    Pass pass = this.ExtractPassesFromInputBySubString(passStr);
+                    bagPasses.Add(pass);
                 }
                 //是否需要Sleep？
             }
