@@ -13,7 +13,6 @@
     <UserControl.Resources>
         <cvt:StatusConverter x:Key="StatusCvt"/>
         <cvt:PassChildrenCntForgroundConverter x:Key="PassForCvt"/>
-        <cvt:StatusOrderByConverter x:Key="StatusOrderCvt"/>
         <Style x:Key="TblockCenter" TargetType="TextBlock">
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -80,20 +79,7 @@
             <TextBlock Grid.Column="0" Text="{Binding PassesCntMsg, Mode=OneWay}" Style="{StaticResource TblockHeader}"/>
             <TextBlock Grid.Column="1" Text="Start Date" Style="{StaticResource TblockHeader}"/>
             <TextBlock Grid.Column="2" Text="End Date" Style="{StaticResource TblockHeader}"/>
-            <CheckBox Grid.Column="3" Content="Status"  ToolTip="If checked, orderby Status thenby Date, otherwise, orderby Date."
-                                                  HorizontalAlignment="Left"  VerticalAlignment="Center"
-                      FontSize="16" FontWeight="Bold"
-                IsChecked="{Binding OrderbyStatus, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}" Margin="0">
-                <CheckBox.Template>
-                    <ControlTemplate TargetType="CheckBox">
-                        <Border BorderBrush="Yellow" BorderThickness="1">
-                            <Grid Background="{TemplateBinding IsChecked, Converter={StaticResource StatusOrderCvt}}">
-                                <ContentPresenter/>
-                            </Grid>
-                        </Border>
-                    </ControlTemplate>
-                </CheckBox.Template>
-            </CheckBox>
+            <TextBlock Grid.Column="3" Text="Status" Style="{StaticResource TblockHeader}"/>
             <TextBlock Grid.Column="4" Text="SN" Style="{StaticResource TblockHeader}"/>
             <TextBlock Grid.Column="5" Text="Details" Style="{StaticResource TblockHeader}" Margin="0"/>
         </Grid>
