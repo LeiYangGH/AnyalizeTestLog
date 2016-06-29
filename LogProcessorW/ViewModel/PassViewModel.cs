@@ -17,14 +17,19 @@ namespace LogProcessorW.ViewModel
             this.StartDateString = pass.StartDateString;
             this.StartDate = pass.StartDate;
             this.EndDate = pass.EndDate;
-            this.ObsTests = new ObservableCollection<TestViewModel>(
-               pass.listTests.Select(x => new TestViewModel(x)));
+            this.ConstructObsTests();
             this.HasTests = this.obsTests.Count > 0;
             MessengerInstance.Register<TestViewModel>(this, (t) =>
             {
                 if (this.ObsTests.Contains(t))
                     this.RaisePropertyChanged(() => this.TestsCntMsg);
             });
+        }
+
+        private void ConstructObsTests()
+        {
+            this.ObsTests = new ObservableCollection<TestViewModel>(
+                pass.listTests.Select(x => new TestViewModel(x)));
         }
 
         private ObservableCollection<TestViewModel> obsTests;
@@ -67,6 +72,8 @@ namespace LogProcessorW.ViewModel
                 }
             }
         }
+
+
 
         public string TestsCntMsg
         {
@@ -133,6 +140,24 @@ namespace LogProcessorW.ViewModel
         {
             get;
             set;
+        }
+
+        /// <summary>
+        /// 根据日期排序或者根据状态优先排序
+        /// </summary>
+        /// <param name="byStatus"></param>
+        public void SortTestVmsBy(bool byStatus)
+        {
+            if (byStatus)
+            {
+                this.ObsTests = new ObservableCollection<TestViewModel>(this.ObsTests
+                               .OrderBy(x => x.Status).ThenBy(x => x.Date));
+            }
+            else
+            {
+                this.ObsTests = new ObservableCollection<TestViewModel>(this.ObsTests
+                                .OrderBy(x => x.Date));
+            }
         }
     }
 }

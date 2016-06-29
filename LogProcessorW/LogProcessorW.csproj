@@ -80,6 +80,7 @@
     </ApplicationDefinition>
     <Compile Include="Converters\PassChildrenCntForgroundConverter.cs" />
     <Compile Include="Converters\StatusConverter.cs" />
+    <Compile Include="Converters\StatusOrderByConverter.cs" />
     <Compile Include="LogProcessor\Constants.cs" />
     <Compile Include="LogProcessor\Pass.cs" />
     <Compile Include="LogProcessor\Test.cs" />

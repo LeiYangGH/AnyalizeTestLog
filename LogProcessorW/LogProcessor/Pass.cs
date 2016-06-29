@@ -43,7 +43,7 @@ namespace LogProcessor
             this.listTests = testsText.Split(new string[] { Constants.at },
                 StringSplitOptions.RemoveEmptyEntries)
                 .Where(x => x.Length > 30).Select(x => new Test(x))
-                .OrderBy(x => x.Status).ThenBy(x => x.Date).ToList();
+                .OrderBy(x => x.Date).ToList();
         }
 
         /// <summary>
