@@ -141,23 +141,5 @@ namespace LogProcessorW.ViewModel
             get;
             set;
         }
-
-        /// <summary>
-        /// 根据日期排序或者根据状态优先排序
-        /// </summary>
-        /// <param name="byStatus"></param>
-        public void SortTestVmsBy(bool byStatus)
-        {
-            if (byStatus)
-            {
-                this.ObsTests = new ObservableCollection<TestViewModel>(this.ObsTests
-                               .OrderBy(x => x.Status).ThenBy(x => x.Date));
-            }
-            else
-            {
-                this.ObsTests = new ObservableCollection<TestViewModel>(this.ObsTests
-                                .OrderBy(x => x.Date));
-            }
-        }
     }
 }

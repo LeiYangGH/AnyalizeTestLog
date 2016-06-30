@@ -42,8 +42,6 @@
         </Grid>
         <log:UC4Log Grid.Row="1">
         </log:UC4Log>
-        <!--<log:UCTreeGrid Grid.Row="1"/>-->
-        <!--<log:UCXceed Grid.Row="1"/>-->
         <StatusBar MinHeight="20" Grid.Row="2"  HorizontalAlignment="Stretch">
             <Grid>
                 <Grid.ColumnDefinitions>

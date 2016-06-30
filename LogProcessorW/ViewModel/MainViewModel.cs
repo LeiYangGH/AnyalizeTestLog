@@ -67,33 +67,6 @@ namespace LogProcessorW.ViewModel
             }
         }
 
-        /// <summary>
-        /// 界面点击Status排序后触发
-        /// </summary>
-        public bool? OrderbyStatus
-        {
-            set
-            {
-                if (this.ObsPasses == null)
-                    return;
-                this.SortTests(value ?? false);
-            }
-        }
-
-        private async Task SortTests(bool byStatus)
-        {
-            if (this.ObsPasses != null)
-            {
-                await Task.Run(() =>
-                {
-                    this.ObsPasses.AsParallel().ForAll((pVm) =>
-                   {
-                       pVm.SortTestVmsBy(byStatus);
-                   });
-                });
-            }
-        }
-
         private string logFileName;
         public string LogFileName
         {
