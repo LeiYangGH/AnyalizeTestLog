@@ -50,25 +50,18 @@ namespace LogProcessor
         /// <returns></returns>
         private string ExtractStatusFormATest()
         {
-            int loc = this.testText.IndexOfAny(new char[] { '\"', '?', '/' });
-            if (loc < 0)
+            string trimE = this.testText.TrimEnd();
+            char found = trimE[trimE.Length - 20];//Constants.dateStringLenth + 1
+            switch (found)
             {
-                return "";
-            }
-            else
-            {
-                string found = this.testText.Substring(loc, 1);
-                switch (found)
-                {
-                    case "\"":
-                        return Constants.passCharString;
-                    case "?":
-                        return Constants.errorCharString;
-                    case "/":
-                        return Constants.failCharString;
-                    default:
-                        throw new Exception();
-                }
+                case '\"':
+                    return Constants.passCharString;
+                case '?':
+                    return Constants.errorCharString;
+                case '/':
+                    return Constants.failCharString;
+                default:
+                    return "";
             }
         }
 
