@@ -328,7 +328,6 @@ namespace LogProcessorW.ViewModel
         private void ReadFileToQueue(System.Threading.IProgress<long> progress)
         {
             this.queue = new ConcurrentQueue<string>();
-            this.readDone = false;
             StringBuilder sbLines4Pass = new StringBuilder();//用来暂存Pass字符串
             string passStr = null;
             foreach (string line in File.ReadLines(logFileName, Encoding.UTF8))
@@ -388,12 +387,11 @@ namespace LogProcessorW.ViewModel
 
             await Task.Run(() =>
              {
+                 this.readDone = false;
                  var read = Task.Run(() =>
                  {
                      ReadFileToQueue(progress);
                  });
-                 //会不会有t1没运行t2就结束的情况？
-                 Thread.Sleep(15);
                  var extract = Task.Run(() =>
                  {
                      lstPasses = ExtractPassesFromQueue();
