@@ -81,7 +81,10 @@
     <Compile Include="Converters\PassChildrenCntForgroundConverter.cs" />
     <Compile Include="Converters\StatusConverter.cs" />
     <Compile Include="LogProcessor\Constants.cs" />
+    <Compile Include="LogProcessor\ILogReader.cs" />
+    <Compile Include="LogProcessor\LogSubstringReader.cs" />
     <Compile Include="LogProcessor\Pass.cs" />
+    <Compile Include="LogProcessor\ReadProgress.cs" />
     <Compile Include="LogProcessor\Test.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
