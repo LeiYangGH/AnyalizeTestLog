@@ -18,6 +18,7 @@ namespace LogProcessor
         public const string passCharString = @"P";
         public const string failCharString = @"F";
         public const string errorCharString = @"E";
+        public const int statusLastIndex = 20;
         public const string SN = @"SN";
         public const string dateFormatString = @"dd-MMM-yy  HH:mm:ss";
         public const string logExtFilter = @"log|*.log|txt|*.txt";

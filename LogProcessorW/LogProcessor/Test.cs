@@ -51,7 +51,7 @@ namespace LogProcessor
         private string ExtractStatusFormATest()
         {
             string trimE = this.testText.TrimEnd();
-            char found = trimE[trimE.Length - 20];//Constants.dateStringLenth + 1
+            char found = trimE[trimE.Length - Constants.statusLastIndex];
             switch (found)
             {
                 case '\"':

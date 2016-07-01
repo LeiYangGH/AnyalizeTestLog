@@ -32,12 +32,11 @@ namespace LogProcessor
             this.Line0S = line0S;
             this.StartDateString = sdt;
             this.EndDate = edt;
+            this.StartDate = DateTime.ParseExact(this.StartDateString, Constants.dateFormatString,
+    CultureInfo.InvariantCulture);
             //only for emptypass
             if (string.IsNullOrWhiteSpace(testsText))
                 return;
-
-            this.StartDate = DateTime.ParseExact(this.StartDateString, Constants.dateFormatString,
-                CultureInfo.InvariantCulture);
             //Debug.Assert(this.StartDate != null && this.StartDate != new DateTime());
             //使用@拆分出各个Pass
             this.listTests = testsText.Split(new string[] { Constants.at },
