@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LogProcessorW.LogProcessor
+namespace LogProcessor
 {
     public struct ReadProgress
     {

@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LogProcessorW.LogProcessor
+namespace LogProcessor
 {
     /// <summary>
     /// 使用Substring来解析，特点是速度快，缺点是灵活性差，要求Log文件规范

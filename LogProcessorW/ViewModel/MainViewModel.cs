@@ -12,7 +12,6 @@ using System.Diagnostics;
 using System.Threading;
 using System.Windows;
 using System.Collections.Generic;
-using LogProcessorW.LogProcessor;
 namespace LogProcessorW.ViewModel
 {
     public class MainViewModel : ViewModelBase
