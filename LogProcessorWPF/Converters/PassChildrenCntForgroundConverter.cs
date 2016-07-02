@@ -1,4 +1,4 @@
-﻿using LogProcessorW.ViewModel;
+﻿using LogProcessorWPF.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Media;
 
-namespace LogProcessorW.Converters
+namespace LogProcessorWPF.Converters
 {
     [ValueConversion(typeof(string), typeof(Brush))]
     public class PassChildrenCntForgroundConverter : IValueConverter

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Data;
 using LogProcessor;
 using System.Windows.Media;
-namespace LogProcessorW.Converters
+namespace LogProcessorWPF.Converters
 {
     [ValueConversion(typeof(string), typeof(Brush))]
     public class StatusConverter : IValueConverter

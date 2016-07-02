@@ -1,8 +1,8 @@
-﻿<Window x:Class="LogProcessorW.MainWindow"
+﻿<Window x:Class="LogProcessorWPF.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:log="clr-namespace:LogProcessorW"
-        xmlns:logProp="clr-namespace:LogProcessorW.Properties"
+        xmlns:log="clr-namespace:LogProcessorWPF"
+        xmlns:logProp="clr-namespace:LogProcessorWPF.Properties"
         Title="Log Processor" Height="550" Width="610"  
         Loaded="Window_Loaded" Icon="Resources/log.png">
     <Window.Resources>

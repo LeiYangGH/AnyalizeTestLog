@@ -5,7 +5,7 @@ VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestProject1", "UnitTestProject1\UnitTestProject1.csproj", "{B3F065A8-4257-4A87-9659-7AF89EEBD949}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogProcessorW", "LogProcessorW\LogProcessorW.csproj", "{426C8181-5413-40B8-A257-54896A23E7B3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogProcessorWPF", "LogProcessorWPF\LogProcessorWPF.csproj", "{426C8181-5413-40B8-A257-54896A23E7B3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogProcessor", "LogProcessor\LogProcessor.csproj", "{684D4EBA-4445-4B6D-BB4A-9B4E091A5309}"
 EndProject

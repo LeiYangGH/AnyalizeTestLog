@@ -1,6 +1,6 @@
 ﻿using System.Windows;
-using LogProcessorW.ViewModel;
-namespace LogProcessorW
+using LogProcessorWPF.ViewModel;
+namespace LogProcessorWPF
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

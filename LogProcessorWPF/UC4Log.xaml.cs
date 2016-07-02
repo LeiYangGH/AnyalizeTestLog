@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace LogProcessorW
+namespace LogProcessorWPF
 {
     /// <summary>
     /// Interaction logic for UC4Log.xaml

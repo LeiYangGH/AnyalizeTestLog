@@ -3,7 +3,7 @@ using GalaSoft.MvvmLight.Command;
 using LogProcessor;
 using System.Threading.Tasks;
 using System.Windows.Documents;
-namespace LogProcessorW.ViewModel
+namespace LogProcessorWPF.ViewModel
 {
     public class TestViewModel : ViewModelBase
     {

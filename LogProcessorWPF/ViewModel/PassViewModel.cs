@@ -4,7 +4,7 @@ using System.Linq;
 using GalaSoft.MvvmLight;
 using LogProcessor;
 using System.Collections.ObjectModel;
-namespace LogProcessorW.ViewModel
+namespace LogProcessorWPF.ViewModel
 {
     public class PassViewModel : ViewModelBase
     {

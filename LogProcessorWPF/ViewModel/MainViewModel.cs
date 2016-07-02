@@ -12,7 +12,7 @@ using System.Diagnostics;
 using System.Threading;
 using System.Windows;
 using System.Collections.Generic;
-namespace LogProcessorW.ViewModel
+namespace LogProcessorWPF.ViewModel
 {
     public class MainViewModel : ViewModelBase
     {
