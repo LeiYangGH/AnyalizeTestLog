@@ -15,12 +15,11 @@ namespace LogProcessor
                 ReadingLinesCount = logFileTotalLinesGuess;
 
             this.ReadingPercent = (int)(ReadingLinesCount / (double)logFileTotalLinesGuess * 100d);
-            this.Message = string.Format("{0} lines read", ReadingPercent);
+            this.Message = string.Format("{0} lines read", ReadingLinesCount);
         }
 
         public long ReadingLinesCount;
         public int ReadingPercent;
         public string Message;
-
     }
 }

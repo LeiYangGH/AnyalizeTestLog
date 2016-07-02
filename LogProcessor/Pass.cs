@@ -53,6 +53,25 @@ namespace LogProcessor
                 .OrderBy(x => x.Date).ToList();
         }
 
+
+        private Pass clone = null;
+        /// <summary>
+        /// 新的Pass供保存用
+        /// </summary>
+        public Pass PassClonedWithBasicProperties
+        {
+            get
+            {
+                if (this.clone == null)
+                {
+                    this.clone = new Pass();
+                    clone.StartDateString = this.StartDateString;
+                    clone.EndDate = this.EndDate;
+                }
+                return this.clone;
+            }
+        }
+
         /// <summary>
         /// 点击保存时Pass的内容，可以改变return内容来测试
         /// </summary>

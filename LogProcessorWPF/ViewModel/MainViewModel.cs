@@ -261,11 +261,10 @@ namespace LogProcessorWPF.ViewModel
             string fileName = ChooseSaveFileName();
             if (string.IsNullOrWhiteSpace(fileName))
                 return;
-
+            this.Msg = "Saving...";
             var passes = this.GetCheckedPasses();
             string re = await (new LogWriter(fileName)).SavePasses(passes);
-            this.Msg = "Saving...";
-            this.Msg = string.Format(re);
+            this.Msg = re;
         }
         #endregion commands
 

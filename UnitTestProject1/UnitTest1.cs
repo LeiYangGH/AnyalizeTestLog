@@ -8,6 +8,7 @@ using LogProcessor;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Diagnostics;
+using System.Threading.Tasks;
 namespace UnitTestProject1
 {
     [TestClass]
@@ -69,6 +70,44 @@ namespace UnitTestProject1
             Assert.AreEqual(2, pass.listTests.Count);
             Assert.AreEqual("E", pass.listTests[0].Status);
             Assert.AreEqual("SS160605E", pass.listTests[1].SN);
+        }
+
+        [TestMethod]
+        public void TestWriteKeepData()
+        {
+            string tempFile1 = Path.GetTempFileName();
+            File.WriteAllText(tempFile1, onePassTextWith2Tests);
+
+            var readProgress = new System.Threading.EventProgress<ReadProgress>();
+
+            var reader1 = new LogSubstringReader(tempFile1);
+            var task1 = reader1.ReadAndExtractPasses(readProgress);
+            IList<Pass> passes1 = task1.Result;
+            File.Delete(tempFile1);
+
+            string tempFile2 = Path.GetTempFileName();
+            var writer = new LogWriter(tempFile2);
+            var tw = Task.Run(() => writer.SavePasses(passes1));
+            Task.WaitAll(tw);
+
+            var reader2 = new LogSubstringReader(tempFile2);
+            var task2 = reader2.ReadAndExtractPasses(readProgress);
+            IList<Pass> passes2 = task2.Result;
+            File.Delete(tempFile2);
+
+            Assert.AreEqual(passes1.Count, passes2.Count);
+            for (int i = 0; i < passes1.Count; i++)
+            {
+                Assert.AreEqual(passes1[i].StartDateString, passes2[i].StartDateString);
+                Assert.AreEqual(passes1[i].EndDate, passes2[i].EndDate);
+                Assert.AreEqual(passes1[i].listTests.Count, passes2[i].listTests.Count);
+                for (int j = 0; j < passes1[i].listTests.Count; j++)
+                {
+                    Assert.AreEqual(passes1[i].listTests[j].Date, passes2[i].listTests[j].Date);
+                    Assert.AreEqual(passes1[i].listTests[j].SN, passes2[i].listTests[j].SN);
+                    Assert.AreEqual(passes1[i].listTests[j].Status, passes2[i].listTests[j].Status);
+                }
+            }
         }
 
         static string oneEmptyPass = @"

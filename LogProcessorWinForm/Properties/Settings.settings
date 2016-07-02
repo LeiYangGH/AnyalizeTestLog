@@ -1,0 +1,9 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="LogProcessorWinForm.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="LastLogFileName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Please choose a log file first.</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

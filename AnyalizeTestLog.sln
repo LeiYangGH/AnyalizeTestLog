@@ -34,6 +34,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Design", "Design", "{D2F8D7
 		Design\3.checkanduncheck-pass as example.png = Design\3.checkanduncheck-pass as example.png
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogProcessorWinForm", "LogProcessorWinForm\LogProcessorWinForm.csproj", "{62ADDE3A-AA5E-49EE-B888-A639DBF72304}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -52,6 +54,10 @@ Global
 		{684D4EBA-4445-4B6D-BB4A-9B4E091A5309}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{684D4EBA-4445-4B6D-BB4A-9B4E091A5309}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{684D4EBA-4445-4B6D-BB4A-9B4E091A5309}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62ADDE3A-AA5E-49EE-B888-A639DBF72304}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62ADDE3A-AA5E-49EE-B888-A639DBF72304}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62ADDE3A-AA5E-49EE-B888-A639DBF72304}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62ADDE3A-AA5E-49EE-B888-A639DBF72304}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

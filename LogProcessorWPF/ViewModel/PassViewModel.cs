@@ -39,9 +39,7 @@ namespace LogProcessorWPF.ViewModel
         {
             get
             {
-                Pass clone = new Pass();
-                clone.StartDateString = this.StartDateString;
-                clone.EndDate = this.EndDate;
+                Pass clone = this.pass.PassClonedWithBasicProperties;
                 clone.listTests = new List<Test>(this.ObsTests
                     .Where(t => t.IsChecked ?? false)
                     .Select(x => x.test).ToList());
