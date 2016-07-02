@@ -25,16 +25,10 @@ namespace LogProcessor
         {
             try
             {
+                var lines = lstPasses.Select(p => p.ToString());
                 await Task.Run(() =>
                 {
-                    using (StreamWriter sw =
-                        new StreamWriter(this.saveFileName, false, Encoding.UTF8))
-                    {
-                        foreach (Pass pass in lstPasses)
-                        {
-                            sw.WriteLine(pass);
-                        }
-                    }
+                    File.WriteAllLines(saveFileName, lines, Encoding.UTF8);
                 });
             }
             catch (Exception ex)
