@@ -29,11 +29,11 @@ namespace LogProcessor
         #region Extract pass-test
 
         /// <summary>
-        /// 从文本中提取Pass
+        /// 从文本中提取Pass, 本来应该是private，public只是为了在单元测试里用
         /// </summary>
         /// <param name="input">任意文本，在本程序中为包含（一个）[]的一段文本</param>
         /// <returns></returns>
-        private Pass ExtractOnePassBySubString(string input)
+        public Pass ExtractOnePassBySubString(string input)
         {
             Pass p = null;
 

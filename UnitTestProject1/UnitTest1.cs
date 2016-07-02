@@ -13,10 +13,6 @@ namespace UnitTestProject1
     [TestClass]
     public class UnitTest1
     {
-        //string logFileName = Path.Combine(Environment.CurrentDirectory, @"input0.txt");
-        string logFileName = Path.Combine(Environment.CurrentDirectory, @"input1.txt");
-        //string logFileName = Path.Combine(Environment.CurrentDirectory, @"inputsubpass.txt");
-
         [TestMethod]
         public void TestListViewItemParent()
         {
@@ -44,31 +40,43 @@ namespace UnitTestProject1
             Assert.AreEqual(0.5, re);
         }
 
-        //[TestMethod]
-        //public void TestMatchPassAndDate()
-        //{
-        //    bool b = Constants.regFindPasses.IsMatch(onePassText);
-        //    Assert.AreEqual(true, b);
-
-        //    foreach (Match m in Constants.regFindPasses.Matches(onePassText))
-        //    {
-        //        Console.WriteLine("group1 = {0}", m.Groups[1].Value);
-        //        Console.WriteLine("group3 = {0}", m.Groups[3].Value);
-        //        //Console.WriteLine("group2 = {0}", m.Groups[2].Value);
-        //        Assert.AreEqual("26-FEB-16  14:10:50", m.Groups[1].Value);
-        //        Assert.AreEqual("26-FEB-16  14:52:14", m.Groups[3].Value);
-        //    }
-        //}
-
         [TestMethod]
-        public void TestMatchSN()
+        public void TestExtractOneTest()
         {
-            string sn = Test.ExtractSNFormATest(onePassText);
-            Console.WriteLine(sn);
-            Assert.AreEqual("SS160605E", sn);
+            Test test = new Test(oneFailTestTextWithSN);
+            Assert.AreEqual("26-FEB-16  14:12:16", test.DateString);
+            Assert.AreEqual("F", test.Status);
+            Assert.AreEqual("SS160605E", test.SN);
         }
 
-        static string onePassText = @"
+        [TestMethod]
+        public void TestExtractEmptyPassFromInput()
+        {
+            var reader = new LogSubstringReader("");
+            Pass pass = reader.ExtractOnePassBySubString(oneEmptyPass);
+            Assert.AreEqual("26-FEB-16  15:04:49", pass.StartDateString);
+            Assert.AreEqual("26-FEB-16  18:19:06", pass.EndDate);
+            Assert.AreEqual(0, pass.listTests.Count);
+        }
+
+        [TestMethod]
+        public void TestExtractOnePassFromInput()
+        {
+            var reader = new LogSubstringReader("");
+            Pass pass = reader.ExtractOnePassBySubString(onePassTextWith2Tests);
+            Assert.AreEqual("26-FEB-16  14:10:50", pass.StartDateString);
+            Assert.AreEqual("26-FEB-16  14:52:14", pass.EndDate);
+            Assert.AreEqual(2, pass.listTests.Count);
+            Assert.AreEqual("E", pass.listTests[0].Status);
+            Assert.AreEqual("SS160605E", pass.listTests[1].SN);
+        }
+
+        static string oneEmptyPass = @"
+S:\Projects\PR\PR11274_Rev01\PR11274.obc[26-FEB-16  15:04:49
+]26-FEB-16  18:19:06
+";
+
+        static string onePassTextWith2Tests = @"
 S:\Projects\PR\PR11274_Rev01\PR11274.obc[26-FEB-16  14:10:50
 @26-FEB-16  14:12:16
 
@@ -103,5 +111,19 @@ PS_OPEN=(-39.999999M,39.999999M)V
 ?26-FEB-16  14:52:09
 
 ]26-FEB-16  14:52:14";
+
+        static string oneFailTestTextWithSN = @"26-FEB-16  14:12:16 SN SS160605E
+
+PHILIPS P/N = 1118921
+
+PRODUCT = PR11274
+
+OPERATOR = 24704
+
+STATUS = ENGINEERING
+
+TESTER ID = G016
+/26-FEB-16  14:24:18
+";
     }
 }

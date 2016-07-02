@@ -73,6 +73,10 @@
       <Project>{426c8181-5413-40b8-a257-54896a23e7b3}</Project>
       <Name>LogProcessorW</Name>
     </ProjectReference>
+    <ProjectReference Include="..\LogProcessor\LogProcessor.csproj">
+      <Project>{684d4eba-4445-4b6d-bb4a-9b4e091a5309}</Project>
+      <Name>LogProcessor</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

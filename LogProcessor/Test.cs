@@ -24,12 +24,12 @@ namespace LogProcessor
         /// <param name="testText">包含Test的文本</param>
         public Test(string testText)
         {
-            this.testText = testText;
+            this.testText = testText.Trim();//去掉空白更保险
             this.DateString = this.ExtractDatetimeFormATest();
             this.Date = DateTime.ParseExact(this.DateString, Constants.dateFormatString,
                          CultureInfo.InvariantCulture);
             this.Status = this.ExtractStatusFormATest();
-            this.SN = Test.ExtractSNFormATest(this.testText);
+            this.SN = this.ExtractSNFormATest();
         }
 
         /// <summary>
@@ -69,19 +69,19 @@ namespace LogProcessor
         /// 提取SN, static for test
         /// </summary>
         /// <returns></returns>
-        public static string ExtractSNFormATest(string input)
+        private string ExtractSNFormATest()
         {
             try
             {
                 //@26-FEB-16  14:45:13 SN SS160605E
-                string line0 = input.Substring(0, input.IndexOf(Environment.NewLine));
+                string line0 = this.testText.Substring(0, this.testText.IndexOf(Environment.NewLine));
                 int locSN = line0.LastIndexOf(Constants.SN);
                 string sn = "";
                 if (locSN > 0)
                 {
                     sn = line0.Substring(locSN + 2);
                 }
-                return sn;
+                return sn.Trim();
             }
             catch (Exception)
             {

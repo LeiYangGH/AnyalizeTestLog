@@ -41,9 +41,8 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AsyncCtpLibrary, Version=1.0.3951.36518, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Refdlls\AsyncCtpLibrary.dll</HintPath>
+    <Reference Include="AsyncCtpLibrary">
+      <HintPath>..\RefDlls\AsyncCtpLibrary.dll</HintPath>
     </Reference>
     <Reference Include="GalaSoft.MvvmLight, Version=5.3.0.19026, Culture=neutral, PublicKeyToken=e7570ab207bcb616, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -80,12 +79,6 @@
     </ApplicationDefinition>
     <Compile Include="Converters\PassChildrenCntForgroundConverter.cs" />
     <Compile Include="Converters\StatusConverter.cs" />
-    <Compile Include="LogProcessor\Constants.cs" />
-    <Compile Include="LogProcessor\ILogReader.cs" />
-    <Compile Include="LogProcessor\LogSubstringReader.cs" />
-    <Compile Include="LogProcessor\Pass.cs" />
-    <Compile Include="LogProcessor\ReadProgress.cs" />
-    <Compile Include="LogProcessor\Test.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -144,25 +137,17 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Design\1.main flow.png" />
-    <Resource Include="Design\2.extract one pass.png" />
-    <Resource Include="Design\3.checkanduncheck-pass as example.png" />
     <Content Include="Refdlls\GalaSoft.MvvmLight.dll" />
     <Content Include="Refdlls\Microsoft.Practices.ServiceLocation.dll" />
     <Content Include="Refdlls\System.Windows.Interactivity.dll" />
-    <Resource Include="Requirements\LargeLog100M.txt" />
     <Resource Include="Resources\log.png" />
-    <Resource Include="Requirements\input0.txt" />
-    <Resource Include="Requirements\input1.txt" />
-    <Resource Include="Requirements\inputedit.txt" />
-    <Resource Include="Requirements\inputemptypass.txt" />
-    <Resource Include="Requirements\input1unicode.txt" />
-    <Resource Include="Requirements\inputdateorder.txt" />
-    <Resource Include="Requirements\LogStructure.png" />
-    <Resource Include="Requirements\UI.png" />
-    <Content Include="Refdlls\AsyncCtpLibrary.dll" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\LogProcessor\LogProcessor.csproj">
+      <Project>{684d4eba-4445-4b6d-bb4a-9b4e091a5309}</Project>
+      <Name>LogProcessor</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

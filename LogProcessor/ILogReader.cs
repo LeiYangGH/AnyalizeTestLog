@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LogProcessor
 {
-    interface ILogReader
+    public interface ILogReader
     {
         /// <summary>
         /// 按行读取log，遇到]则把之前读的一块拼接起来，并解析成Pass，最后返回Pass集合

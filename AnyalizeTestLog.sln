@@ -7,6 +7,33 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestProject1", "UnitTes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogProcessorW", "LogProcessorW\LogProcessorW.csproj", "{426C8181-5413-40B8-A257-54896A23E7B3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogProcessor", "LogProcessor\LogProcessor.csproj", "{684D4EBA-4445-4B6D-BB4A-9B4E091A5309}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RefDlls", "RefDlls", "{1986005E-2F37-4F57-B397-A13DCBC3DB11}"
+	ProjectSection(SolutionItems) = preProject
+		RefDlls\AsyncCtpLibrary.dll = RefDlls\AsyncCtpLibrary.dll
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Requirements", "Requirements", "{E5B9021D-3FB0-4AE1-90FA-49AC0EB5CCEB}"
+	ProjectSection(SolutionItems) = preProject
+		Requirements\input0.txt = Requirements\input0.txt
+		Requirements\input1.txt = Requirements\input1.txt
+		Requirements\input1unicode.txt = Requirements\input1unicode.txt
+		Requirements\inputdateorder.txt = Requirements\inputdateorder.txt
+		Requirements\inputedit.txt = Requirements\inputedit.txt
+		Requirements\inputemptypass.txt = Requirements\inputemptypass.txt
+		Requirements\LargeLog100M.txt = Requirements\LargeLog100M.txt
+		Requirements\LogStructure.png = Requirements\LogStructure.png
+		Requirements\UI.png = Requirements\UI.png
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Design", "Design", "{D2F8D703-2DD6-402D-94F6-06AC5E5665A6}"
+	ProjectSection(SolutionItems) = preProject
+		Design\1.main flow.png = Design\1.main flow.png
+		Design\2.extract one pass.png = Design\2.extract one pass.png
+		Design\3.checkanduncheck-pass as example.png = Design\3.checkanduncheck-pass as example.png
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +48,10 @@ Global
 		{426C8181-5413-40B8-A257-54896A23E7B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{426C8181-5413-40B8-A257-54896A23E7B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{426C8181-5413-40B8-A257-54896A23E7B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{684D4EBA-4445-4B6D-BB4A-9B4E091A5309}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{684D4EBA-4445-4B6D-BB4A-9B4E091A5309}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{684D4EBA-4445-4B6D-BB4A-9B4E091A5309}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{684D4EBA-4445-4B6D-BB4A-9B4E091A5309}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
