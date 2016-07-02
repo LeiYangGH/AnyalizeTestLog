@@ -167,7 +167,7 @@ namespace LogProcessorWPF.ViewModel
             }
             Properties.Settings.Default.LastLogFileName = this.LogFileName;
             Properties.Settings.Default.Save();
-            long sec = await this.Go();
+            long sec = await this.StartReadAndExtract();
             this.Perf = string.Format("Time used（ms）： {0}", sec);
         }
 
@@ -252,19 +252,25 @@ namespace LogProcessorWPF.ViewModel
             return null;
         }
 
+        /// <summary>
+        /// 保存勾选的Passes和Tests
+        /// </summary>
+        /// <returns></returns>
         private async Task Save()
         {
             string fileName = ChooseSaveFileName();
             if (string.IsNullOrWhiteSpace(fileName))
                 return;
-            string re = await SaveModifiedLog(fileName);
-            this.Msg = string.Format(re);
 
+            var passes = this.GetCheckedPasses();
+            string re = await (new LogWriter(fileName)).SavePasses(passes);
+            this.Msg = "Saving...";
+            this.Msg = string.Format(re);
         }
         #endregion commands
 
         //点击Extract按钮后会触发，整个函数运行完则获取到所有数据并显示
-        private async Task<long> Go()
+        private async Task<long> StartReadAndExtract()
         {
             Stopwatch watch = new Stopwatch();
             watch.Start();
@@ -301,45 +307,17 @@ namespace LogProcessorWPF.ViewModel
 
         #endregion
 
-        private async Task<string> SaveModifiedLog(string fileName)
-        {
-            try
-            {
-                using (StreamWriter sw = new StreamWriter(fileName, false, Encoding.UTF8))
-                {
-                    await WriteCheckedPasses(sw);
-                }
-            }
-            catch (Exception ex)
-            {
-                return string.Format(ex.Message);
-            }
 
-            return fileName;
-        }
 
         /// <summary>
-        /// 保存勾选的Passes,连带保存勾选的Tests
+        /// 获取勾选的Passes
         /// </summary>
         /// <param name="sw"></param>
         /// <returns></returns>
-        private async Task WriteCheckedPasses(StreamWriter sw)
+        private IList<Pass> GetCheckedPasses()
         {
-            await Task.Run(() =>
-            {
-                foreach (PassViewModel passVM in this.ObsPasses)
-                {
-                    //如果去掉这个if，则不管是否勾选Pass都会保存
-                    if (passVM.IsChecked ?? false)
-                    {
-                        Pass p = passVM.pass;
-                        //如果去掉.Where(x => x.IsChecked ?? false)，不管是否勾选Test都会保存
-                        p.listTests = new List<Test>(passVM.ObsTests.Where(x => x.IsChecked ?? false)
-                            .Select(x => x.test));
-                        sw.WriteLine(p.ToString());
-                    }
-                }
-            });
+            return this.ObsPasses.Where(p => p.IsChecked ?? false)
+                .Select(p => p.PassClonedWithCheckedTests).ToList();
         }
     }
 }

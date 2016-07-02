@@ -32,6 +32,23 @@ namespace LogProcessorWPF.ViewModel
                 pass.listTests.Select(x => new TestViewModel(x)));
         }
 
+        /// <summary>
+        /// 根据勾选Test的情况重新组装新的Pass供保存用
+        /// </summary>
+        public Pass PassClonedWithCheckedTests
+        {
+            get
+            {
+                Pass clone = new Pass();
+                clone.StartDateString = this.StartDateString;
+                clone.EndDate = this.EndDate;
+                clone.listTests = new List<Test>(this.ObsTests
+                    .Where(t => t.IsChecked ?? false)
+                    .Select(x => x.test).ToList());
+                return clone;
+            }
+        }
+
         private ObservableCollection<TestViewModel> obsTests;
         public ObservableCollection<TestViewModel> ObsTests
         {

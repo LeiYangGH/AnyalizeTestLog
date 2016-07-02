@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="ILogReader.cs" />
+    <Compile Include="LogWriter.cs" />
     <Compile Include="LogSubstringReader.cs" />
     <Compile Include="Pass.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

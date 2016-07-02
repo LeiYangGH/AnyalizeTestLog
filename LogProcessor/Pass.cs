@@ -22,6 +22,14 @@ namespace LogProcessor
         public DateTime StartDate;//用来排序的时间
 
         /// <summary>
+        /// 只在保存时候用
+        /// </summary>
+        public Pass()
+        {
+
+        }
+
+        /// <summary>
         /// 根据传进来的一段文本解析Pass
         /// </summary>
         /// <param name="testsText">包含若干Tests的那段文本</param>
