@@ -21,7 +21,7 @@ namespace LogProcessor
         /// </summary>
         /// <param name="lstPasses"></param>
         /// <returns>文件名或错误消息</returns>
-        public async Task<string> SavePasses(IList<Pass> lstPasses)
+        public async Task<string> SavePasses(IEnumerable<Pass> lstPasses)
         {
             try
             {

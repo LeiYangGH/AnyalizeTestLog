@@ -192,30 +192,31 @@ namespace LogProcessorWinForm
         /// </summary>
         /// <param name="sw"></param>
         /// <returns></returns>
-        private IList<Pass> GetCheckedPasses()
+        private IEnumerable<Pass> GetCheckedPasses()
         {
-            List<Pass> lstP = new List<Pass>();
-            foreach (var item4 in this.lvwTests.Items.OfType<ListViewItem4Log>()
-                .Where(x => x.IemLogType == ListViewItemLog4Type.PassStart && x.Checked))
-            {
-                Pass p = item4.Pass.PassClonedWithBasicProperties;
-                p.listTests = item4.ChildrenTestItems
-                    .Where(i => i.Checked).Select(x => x.Test).ToList();
-                lstP.Add(p);
-            }
-            return lstP;
+            return this.lvwTests.Items.OfType<ListViewItem4Log>()
+                 .Where(x => x.IemLogType == ListViewItemLog4Type.PassStart && x.Checked)
+                 .Select(x =>
+                 {
+                     Pass p = x.Pass.PassClonedWithBasicProperties;
+                     p.listTests = x.ChildrenTestItems
+                         .Where(i => i.Checked)
+                         .Select(y => y.Test).ToList();
+                     return p;
+                 }).ToList();
         }
 
         private async void btnSave_Click(object sender, EventArgs e)
         {
-            string fileName = ChooseSaveFileName();
-            if (string.IsNullOrWhiteSpace(fileName))
+            string saveFileName = ChooseSaveFileName();
+            if (string.IsNullOrWhiteSpace(saveFileName))
                 return;
             this.btnSave.Enabled = false;
 
             this.statusLblMsg.Text = "Saving...";
             var passes = this.GetCheckedPasses();
-            string re = await (new LogWriter(fileName)).SavePasses(passes);
+            var writer = new LogWriter(saveFileName);
+            string re = await writer.SavePasses(passes);
             this.statusLblMsg.Text = re;
 
             this.btnSave.Enabled = true;

@@ -18,7 +18,7 @@ namespace LogProcessorWPF.ViewModel
             this.StartDate = pass.StartDate;
             this.EndDate = pass.EndDate;
             this.ConstructObsTests();
-            this.HasTests = this.obsTests.Count > 0;
+            this.HasTests = this.ObsTests.Count > 0;
             MessengerInstance.Register<TestViewModel>(this, (t) =>
             {
                 if (this.ObsTests.Contains(t))

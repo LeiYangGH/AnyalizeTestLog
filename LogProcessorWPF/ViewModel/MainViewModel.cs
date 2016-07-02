@@ -258,12 +258,13 @@ namespace LogProcessorWPF.ViewModel
         /// <returns></returns>
         private async Task Save()
         {
-            string fileName = ChooseSaveFileName();
-            if (string.IsNullOrWhiteSpace(fileName))
+            string saveFileName = ChooseSaveFileName();
+            if (string.IsNullOrWhiteSpace(saveFileName))
                 return;
             this.Msg = "Saving...";
             var passes = this.GetCheckedPasses();
-            string re = await (new LogWriter(fileName)).SavePasses(passes);
+            var writer = new LogWriter(saveFileName);
+            string re = await writer.SavePasses(passes);
             this.Msg = re;
         }
         #endregion commands
@@ -313,10 +314,10 @@ namespace LogProcessorWPF.ViewModel
         /// </summary>
         /// <param name="sw"></param>
         /// <returns></returns>
-        private IList<Pass> GetCheckedPasses()
+        private IEnumerable<Pass> GetCheckedPasses()
         {
             return this.ObsPasses.Where(p => p.IsChecked ?? false)
-                .Select(p => p.PassClonedWithCheckedTests).ToList();
+                .Select(p => p.PassClonedWithCheckedTests);
         }
     }
 }
