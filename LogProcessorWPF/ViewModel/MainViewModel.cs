@@ -275,12 +275,6 @@ namespace LogProcessorWPF.ViewModel
 
             ILogReader logReader = new LogSubstringReader(this.LogFileName);
 
-            //var readProgress = new EventProgress<ReadProgress>();
-            //readProgress.ProgressChanged += (s, e) =>
-            //{
-            //    this.UpdateReadProgress(e.Value);
-            //};
-
             //主要耗时部分
             var Passes = await logReader.ReadAndExtractPasses(new Progress<ReadProgress>(p => this.UpdateReadProgress(p)));
 

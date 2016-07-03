@@ -73,6 +73,18 @@ namespace UnitTestProject1
         }
 
         [TestMethod]
+        public void TestSelectClonePassAndTests()
+        {
+            var reader = new LogSubstringReader("");
+            Pass pass = reader.ExtractOnePassBySubString(onePassTextWith2Tests);
+            Pass clone = pass.PassClonedWithBasicProperties;
+            clone.listTests = pass.listTests.Where((x, i) => i == 0).ToList();
+            Assert.AreEqual(1, clone.listTests.Count);
+            clone.listTests[0].SN = "XXX";
+            Assert.AreEqual(pass.listTests[0].SN, clone.listTests[0].SN);
+        }
+
+        [TestMethod]
         public void TestWriteKeepData()
         {
             string tempFile1 = Path.GetTempFileName();
