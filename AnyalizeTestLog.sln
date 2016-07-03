@@ -9,11 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogProcessorWPF", "LogProce
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogProcessor", "LogProcessor\LogProcessor.csproj", "{684D4EBA-4445-4B6D-BB4A-9B4E091A5309}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RefDlls", "RefDlls", "{1986005E-2F37-4F57-B397-A13DCBC3DB11}"
-	ProjectSection(SolutionItems) = preProject
-		RefDlls\AsyncCtpLibrary.dll = RefDlls\AsyncCtpLibrary.dll
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Requirements", "Requirements", "{E5B9021D-3FB0-4AE1-90FA-49AC0EB5CCEB}"
 	ProjectSection(SolutionItems) = preProject
 		Requirements\input0.txt = Requirements\input0.txt

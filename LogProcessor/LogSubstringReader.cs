@@ -1,9 +1,7 @@
-﻿using LogProcessor;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -65,7 +63,7 @@ namespace LogProcessor
         /// <summary>IList<Pass>
         /// 按行读取log，遇到]则把之前读的一块拼接起来，并解析成Pass，最后返回Pass集合
         /// </summary>
-        private void ReadFileToQueue(System.Threading.IProgress<ReadProgress> progress)
+        private void ReadFileToQueue(IProgress<ReadProgress> progress)
         {
             this.queue = new ConcurrentQueue<string>();
             StringBuilder sbLines4Pass = new StringBuilder();//用来暂存Pass字符串
@@ -134,7 +132,7 @@ namespace LogProcessor
         #endregion private methords
 
 
-        public async Task<IList<global::LogProcessor.Pass>> ReadAndExtractPasses(System.Threading.IProgress<ReadProgress> progress)
+        public async Task<IList<LogProcessor.Pass>> ReadAndExtractPasses(IProgress<ReadProgress> progress)
         {
             this.logFileTotalLinesGuess = this.GuessLogFileLineCount();
 

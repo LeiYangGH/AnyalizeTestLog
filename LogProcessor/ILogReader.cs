@@ -14,6 +14,6 @@ namespace LogProcessor
         /// </summary>
         /// <param name="progress">进度</param>
         /// <returns>Pass集合</returns>
-        Task<IList<Pass>> ReadAndExtractPasses(System.Threading.IProgress<ReadProgress> progress);
+        Task<IList<Pass>> ReadAndExtractPasses(IProgress<ReadProgress> progress);
     }
 }

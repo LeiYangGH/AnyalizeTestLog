@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
@@ -9,7 +8,6 @@ using LogProcessor;
 using System.IO;
 using Microsoft.Win32;
 using System.Diagnostics;
-using System.Threading;
 using System.Windows;
 using System.Collections.Generic;
 namespace LogProcessorWPF.ViewModel
@@ -277,14 +275,14 @@ namespace LogProcessorWPF.ViewModel
 
             ILogReader logReader = new LogSubstringReader(this.LogFileName);
 
-            var readProgress = new EventProgress<ReadProgress>();
-            readProgress.ProgressChanged += (s, e) =>
-            {
-                this.UpdateReadProgress(e.Value);
-            };
+            //var readProgress = new EventProgress<ReadProgress>();
+            //readProgress.ProgressChanged += (s, e) =>
+            //{
+            //    this.UpdateReadProgress(e.Value);
+            //};
 
             //主要耗时部分
-            var Passes = await logReader.ReadAndExtractPasses(readProgress);
+            var Passes = await logReader.ReadAndExtractPasses(new Progress<ReadProgress>(p => this.UpdateReadProgress(p)));
 
             //WPF显示的需要，把List<Pass>转化为ObservableCollection<PassViewModel>
             this.ObsPasses = new ObservableCollection<PassViewModel>(

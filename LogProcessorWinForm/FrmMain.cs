@@ -34,26 +34,14 @@ namespace LogProcessorWinForm
         {
             Stopwatch watch = new Stopwatch();
             watch.Start();
-
             ILogReader logReader = new LogSubstringReader(this.logFileName);
-
-            var readProgress = new EventProgress<ReadProgress>();
-            readProgress.ProgressChanged += (s, e) =>
-            {
-                this.UpdateReadProgress(e.Value);
-            };
-
             //主要耗时部分
-            var Passes = await logReader.ReadAndExtractPasses(readProgress);
-
+            var Passes = await logReader.ReadAndExtractPasses(new Progress<ReadProgress>(p => this.UpdateReadProgress(p)));
             this.listPasses = Passes.ToList();
-
             this.DisplayPasses(this.listPasses);
-
             watch.Stop();
             return watch.ElapsedMilliseconds;
         }
-
 
         #region Form UI
         private async void btnExtractTests_Click(object sender, EventArgs e)

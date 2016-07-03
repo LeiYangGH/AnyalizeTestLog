@@ -78,7 +78,7 @@ namespace UnitTestProject1
             string tempFile1 = Path.GetTempFileName();
             File.WriteAllText(tempFile1, onePassTextWith2Tests);
 
-            var readProgress = new System.Threading.EventProgress<ReadProgress>();
+            var readProgress = new Progress<ReadProgress>();
 
             var reader1 = new LogSubstringReader(tempFile1);
             var task1 = reader1.ReadAndExtractPasses(readProgress);
