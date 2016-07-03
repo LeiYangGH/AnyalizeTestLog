@@ -11,10 +11,10 @@ namespace LogProcessor
         public ReadProgress(long readingLinesCount, long logFileTotalLinesGuess)
         {
             this.ReadingLinesCount = readingLinesCount;
-            if (ReadingLinesCount > logFileTotalLinesGuess)
-                ReadingLinesCount = logFileTotalLinesGuess;
-
-            this.ReadingPercent = (int)(ReadingLinesCount / (double)logFileTotalLinesGuess * 100d);
+            if (ReadingLinesCount >= logFileTotalLinesGuess)
+                this.ReadingPercent = 100;
+            else
+                this.ReadingPercent = (int)(ReadingLinesCount / (double)logFileTotalLinesGuess * 100d);
             this.Message = string.Format("{0} lines read", ReadingLinesCount);
         }
 

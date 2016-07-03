@@ -11,7 +11,7 @@ namespace LogProcessor
     {
         public const int dateStringLenth = 19;
         public const int minPassSymbolDistance = 22;
-        public const double fileLenth2LinesRate = 108792831d / 4224929d;
+        public const double fileLenth2LinesRate = 108792831d / 4150000d;
         public const string passStartString = "[";
         public const string passEndString = "]";
         public const string at = @"@";
