@@ -18,15 +18,16 @@ namespace LogProcessor
         protected string Line0S;
         public string StartDateString;
         public string EndDate;
+        public readonly bool HasTests;
         public List<Test> listTests = new List<Test>();
         public DateTime StartDate;//用来排序的时间
 
         /// <summary>
         /// 只在保存时候用
         /// </summary>
-        public Pass()
+        private Pass(bool hasTests)
         {
-
+            this.HasTests = hasTests;
         }
 
         /// <summary>
@@ -35,22 +36,23 @@ namespace LogProcessor
         /// <param name="testsText">包含若干Tests的那段文本</param>
         /// <param name="sdt">开始日期文本</param>
         /// <param name="edt">结束日期文本</param>
-        public Pass(string testsText, string line0S, string sdt, string edt)
+        public Pass(string sdt, string edt, string line0S, bool hasTests, string testsText)
         {
             this.Line0S = line0S;
             this.StartDateString = sdt;
             this.EndDate = edt;
-            this.StartDate = DateTime.ParseExact(this.StartDateString, Constants.dateFormatString,
-    CultureInfo.InvariantCulture);
-            //only for emptypass
-            if (string.IsNullOrWhiteSpace(testsText))
-                return;
-            //Debug.Assert(this.StartDate != null && this.StartDate != new DateTime());
-            //使用@拆分出各个Pass
-            this.listTests = testsText.Split(new string[] { Constants.at },
-                StringSplitOptions.RemoveEmptyEntries)
-                .Where(x => x.Length > 30).Select(x => new Test(x))
-                .OrderBy(x => x.Date).ToList();
+            this.StartDate = DateTime.ParseExact(this.StartDateString,
+                Constants.dateFormatString, CultureInfo.InvariantCulture);
+            this.HasTests = hasTests;
+            if (this.HasTests)
+            {
+                //Debug.Assert(this.StartDate != null && this.StartDate != new DateTime());
+                //使用@拆分出各个Pass
+                this.listTests = testsText.Split(new string[] { Constants.at },
+                    StringSplitOptions.RemoveEmptyEntries)
+                    .Where(x => x.Length > 30).Select(x => new Test(x))
+                    .OrderBy(x => x.Date).ToList();
+            }
         }
 
 
@@ -64,7 +66,7 @@ namespace LogProcessor
             {
                 if (this.clone == null)
                 {
-                    this.clone = new Pass();
+                    this.clone = new Pass(this.HasTests);
                     clone.StartDateString = this.StartDateString;
                     clone.EndDate = this.EndDate;
                 }
@@ -73,40 +75,22 @@ namespace LogProcessor
         }
 
         /// <summary>
-        /// 点击保存时Pass的内容，可以改变return内容来测试
+        /// 点击保存时Pass的内容，
+        /// 通过日期、Tests等参数来组合
+        /// 可以改变return内容来测试
         /// </summary>
         /// <returns></returns>
         public override string ToString()
         {
-            if (this is EmptyPass)
-                return (this as EmptyPass).ToString();
-
-            //如果非空，通过Pass的日期、Tests的内容来组合成整体Pass文本
             StringBuilder sb = new StringBuilder();
             sb.Append(this.Line0S);
             sb.Append(Constants.passStartString);
             sb.AppendLine(this.StartDateString);
-            sb.Append(Constants.at);
-            sb.Append(string.Join(Constants.at, this.listTests));
-            sb.Append(Constants.passEndString);
-            sb.Append(this.EndDate);
-            sb.AppendLine();
-            sb.AppendLine();
-            return sb.ToString();
-        }
-    }
-
-    public class EmptyPass : Pass
-    {
-        public EmptyPass(string testsText, string line0S, string sdt, string edt)
-            : base(null, line0S, sdt, edt) { }
-
-        public override string ToString()
-        {
-            StringBuilder sb = new StringBuilder();
-            sb.Append(this.Line0S);
-            sb.Append(Constants.passStartString);
-            sb.AppendLine(this.StartDateString);
+            if (this.HasTests)
+            {
+                sb.Append(Constants.at);
+                sb.Append(string.Join(Constants.at, this.listTests));
+            }
             sb.Append(Constants.passEndString);
             sb.Append(this.EndDate);
             sb.AppendLine();

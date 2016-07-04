@@ -66,6 +66,7 @@ namespace UnitTestProject1
             var reader = new LogSubstringReader("");
             Pass pass = reader.ExtractOnePassBySubString(onePassTextWith2Tests);
             Assert.AreEqual("26-FEB-16  14:10:50", pass.StartDateString);
+            Assert.AreEqual(new DateTime(2016, 2, 26, 14, 10, 50), pass.StartDate);
             Assert.AreEqual("26-FEB-16  14:52:14", pass.EndDate);
             Assert.AreEqual(2, pass.listTests.Count);
             Assert.AreEqual("E", pass.listTests[0].Status);

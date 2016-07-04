@@ -40,9 +40,10 @@ namespace LogProcessorWPF.ViewModel
             get
             {
                 Pass clone = this.pass.PassClonedWithBasicProperties;
-                clone.listTests = new List<Test>(this.ObsTests
-                    .Where(t => t.IsChecked ?? false)
-                    .Select(x => x.test).ToList());
+                if (clone.HasTests)
+                    clone.listTests = this.ObsTests
+                        .Where(t => t.IsChecked ?? false)
+                        .Select(x => x.test).ToList();
                 return clone;
             }
         }

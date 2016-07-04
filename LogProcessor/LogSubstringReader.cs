@@ -50,10 +50,8 @@ namespace LogProcessor
             //下面两句调试用
             //Debug.Assert(passStartSymbolLoc > 0, passStartSymbolLoc.ToString());
             //Debug.Assert(passEndSymbolLoc - passStartSymbolLoc >= Constants.dateStringLenth);
-            if (passEndSymbolLoc - passStartSymbolLoc > Constants.minPassSymbolDistance)
-                p = new Pass(tests, line0S, sdt, edt);
-            else//[]之间没有@的空Pass
-                p = new EmptyPass(tests, line0S, sdt, edt);
+            bool hasTests = passEndSymbolLoc - passStartSymbolLoc > Constants.minPassSymbolDistance;
+            p = new Pass(sdt, edt, line0S, hasTests, tests);
             return p;
 
         }
