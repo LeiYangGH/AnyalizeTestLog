@@ -51,7 +51,8 @@ namespace LogProcessor
                 this.listTests = testsText.Split(new string[] { Constants.at },
                     StringSplitOptions.RemoveEmptyEntries)
                     .Where(x => x.Length > 30).Select(x => new Test(x))
-                    .OrderBy(x => x.Date).ToList();
+                    //.OrderBy(x => x.Date)//不改变写时顺序
+                    .ToList();
             }
         }
 
@@ -67,6 +68,7 @@ namespace LogProcessor
                 if (this.clone == null)
                 {
                     this.clone = new Pass(this.HasTests);
+                    clone.Line0S = this.Line0S;
                     clone.StartDateString = this.StartDateString;
                     clone.EndDate = this.EndDate;
                 }

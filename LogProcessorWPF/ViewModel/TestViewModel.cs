@@ -1,6 +1,7 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using LogProcessor;
+using System;
 using System.Threading.Tasks;
 using System.Windows.Documents;
 namespace LogProcessorWPF.ViewModel
@@ -13,7 +14,8 @@ namespace LogProcessorWPF.ViewModel
         {
             this.test = test;
             this.IsChecked = true;
-            this.Date = test.DateString;
+            this.DateString = test.DateString;
+            this.Date = test.Date;
             this.Status = test.Status;
             this.SN = test.SN;
         }
@@ -36,8 +38,8 @@ namespace LogProcessorWPF.ViewModel
             }
         }
 
-        private string date;
-        public string Date
+        private DateTime date;
+        public DateTime Date
         {
             get
             {
@@ -49,6 +51,23 @@ namespace LogProcessorWPF.ViewModel
                 {
                     this.date = value;
                     this.RaisePropertyChanged(() => this.Date);
+                }
+            }
+        }
+
+        private string dateString;
+        public string DateString
+        {
+            get
+            {
+                return this.dateString;
+            }
+            set
+            {
+                if (this.dateString != value)
+                {
+                    this.dateString = value;
+                    this.RaisePropertyChanged(() => this.DateString);
                 }
             }
         }

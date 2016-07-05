@@ -54,7 +54,7 @@
                 <CheckBox Grid.Column="1"   Style="{StaticResource ChkCenter}"   
                           IsChecked="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged}"  />
                 <TextBlock Grid.Column="2" Style="{StaticResource TblockCenter}" 
-                           Text="{Binding Date,Mode=OneTime}" />
+                           Text="{Binding DateString,Mode=OneTime}" />
                 <TextBlock Grid.Column="4" Text="{Binding Status,Mode=OneTime}" 
                            FontWeight="Bold" Style="{StaticResource TblockCenter}"
                            Foreground="{Binding Status, Converter={StaticResource StatusCvt}, Mode=OneTime}" />
@@ -64,6 +64,11 @@
                     raw</Hyperlink></TextBlock>
             </Grid>
         </DataTemplate>
+        <CollectionViewSource x:Key="cvs" Source="{Binding ObsPasses, Mode=OneWay}">
+            <CollectionViewSource.SortDescriptions>
+                <scm:SortDescription PropertyName="StartDate"/>
+            </CollectionViewSource.SortDescriptions>
+        </CollectionViewSource>
     </UserControl.Resources>
     <DockPanel>
         <!--Header-->
@@ -86,11 +91,19 @@
 
         <Grid>
             <ScrollViewer VerticalScrollBarVisibility="Auto">
-                <ItemsControl ItemsSource="{Binding ObsPasses, Mode=OneWay, IsAsync=True}"
+                <ItemsControl ItemsSource="{Binding Source={StaticResource cvs}, Mode=OneWay, IsAsync=True}"
                               VirtualizingPanel.IsVirtualizing="True">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate DataType="vm:PassViewModel">
                             <Expander IsExpanded="True" >
+                                <Expander.Resources>
+                                    <CollectionViewSource x:Key="cvsT" 
+                                Source="{Binding ObsTests,Mode=OneTime}">
+                                        <CollectionViewSource.SortDescriptions>
+                                            <scm:SortDescription PropertyName="Date"/>
+                                        </CollectionViewSource.SortDescriptions>
+                                    </CollectionViewSource>
+                                </Expander.Resources>
                                 <Expander.Header>
                                     <Grid>
                                         <Grid.ColumnDefinitions>
@@ -111,7 +124,8 @@
                                     </Grid>
                                 </Expander.Header>
                                 <Expander.Content>
-                                    <ItemsControl ItemsSource="{Binding ObsTests, Mode=OneTime, IsAsync=True}" Margin="2"
+
+                                    <ItemsControl ItemsSource="{Binding Source={StaticResource cvsT}, Mode=OneTime, IsAsync=True}" Margin="2"
                                              Focusable="False" ItemTemplate="{StaticResource TestTemplate}"
                                           >
                                         <i:Interaction.Behaviors>

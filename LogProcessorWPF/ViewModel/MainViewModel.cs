@@ -280,7 +280,9 @@ namespace LogProcessorWPF.ViewModel
 
             //WPF显示的需要，把List<Pass>转化为ObservableCollection<PassViewModel>
             this.ObsPasses = new ObservableCollection<PassViewModel>(
-                Passes.OrderBy(x => x.StartDate).Select(x => new PassViewModel(x)));
+                Passes
+                //.OrderBy(x => x.StartDate)//不改变写时顺序
+                .Select(x => new PassViewModel(x)));
 
             this.RaisePropertyChanged(() => this.PassesCntMsg);
 
