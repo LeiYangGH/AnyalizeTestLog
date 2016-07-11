@@ -49,6 +49,21 @@ namespace LogProcessorWPF.ViewModel
             }
         }
 
+        /// <summary>
+        /// 界面点击Status排序后触发
+        /// </summary>
+        public bool? OrderbyStatus
+        {
+            set
+            {
+                if (this.ObsPasses == null)
+                    return;
+                //this.SortTests(value ?? false);
+                MessengerInstance.Send<bool?>(value);
+
+            }
+        }
+
         public string PassesCntMsg
         {
             get

@@ -40,7 +40,7 @@
                     ToolTip="Save checked tests to a new file."
                     Grid.Row="1" Grid.Column="2">Save</Button>
         </Grid>
-        <log:UC4Log Grid.Row="1">
+        <log:UC4Log x:Name="uC4Log" Grid.Row="1">
         </log:UC4Log>
         <StatusBar MinHeight="20" Grid.Row="2"  HorizontalAlignment="Stretch">
             <Grid>
