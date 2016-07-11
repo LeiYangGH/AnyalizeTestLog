@@ -65,7 +65,7 @@
                     raw</Hyperlink></TextBlock>
             </Grid>
         </DataTemplate>
-        <CollectionViewSource x:Key="cvs" Source="{Binding ObsPasses, Mode=OneWay}">
+        <CollectionViewSource x:Key="cvs" Source="{Binding ObsPasses, Mode=OneWay, IsAsync=True}">
             <CollectionViewSource.SortDescriptions>
                 <scm:SortDescription PropertyName="StartDate"/>
             </CollectionViewSource.SortDescriptions>
@@ -125,7 +125,7 @@
                             <Expander x:Name="exp" IsExpanded="True" >
                                 <Expander.Resources>
                                     <CollectionViewSource x:Key="cvsT" 
-                                Source="{Binding ObsTests,Mode=OneTime}">
+                                Source="{Binding ObsTests,Mode=OneTime, IsAsync=True}">
                                         <CollectionViewSource.SortDescriptions>
                                             <scm:SortDescription PropertyName="Date"/>
                                         </CollectionViewSource.SortDescriptions>
