@@ -5,6 +5,7 @@ using System.Windows.Data;
 using System.ComponentModel;
 using System.Windows.Controls;
 using GalaSoft.MvvmLight.Messaging;
+using System.Windows.Input;
 namespace LogProcessorWPF
 {
     /// <summary>
@@ -24,7 +25,7 @@ namespace LogProcessorWPF
             this.DataContext = this.mainViewModel;
             Messenger.Default.Register<bool?>(this, (p) =>
             {
-                this.SortCvsTs(p);
+                this.SortTests(p);
             });
         }
 
@@ -91,27 +92,38 @@ namespace LogProcessorWPF
         /// 根据选择的列名排序Tests
         /// </summary>
         /// <param name="byStatus">根据Status排序</param>
-        private void SortCvsTs(bool? byStatus)
+        private void SortTests(bool? byStatus)
         {
-            UC4Log uc = this.uC4Log;
-            ItemsControl icp = this.FindChild<ItemsControl>(uc, "ICP");
-            foreach (var pvm in icp.Items)
+            Mouse.OverrideCursor = Cursors.Wait;
+            try
             {
-                var container = icp.ItemContainerGenerator.ContainerFromItem(pvm);
-                var exp = this.FindChild<Expander>(container, "exp");
-                CollectionViewSource cvsT =
-                    (CollectionViewSource)(exp.FindResource("cvsT"));
-                cvsT.SortDescriptions.Clear();
-                if (byStatus ?? false)
+                var icp = this.FindChild<ItemsControl>(this.uC4Log, "ICP");
+                foreach (var pvm in icp.Items)
                 {
-                    cvsT.SortDescriptions.Add(new SortDescription("Status", ListSortDirection.Ascending));
-                    cvsT.SortDescriptions.Add(new SortDescription("Date", ListSortDirection.Ascending));
-                }
-                else
-                {
-                    cvsT.SortDescriptions.Add(new SortDescription("Date", ListSortDirection.Ascending));
+                    var container = icp.ItemContainerGenerator.ContainerFromItem(pvm);
+                    var exp = this.FindChild<Expander>(container, "exp");
+                    CollectionViewSource cvsT =
+                        (CollectionViewSource)(exp.FindResource("cvsT"));
+                    using (cvsT.DeferRefresh())
+                    {
+                        cvsT.SortDescriptions.Clear();
+                        if (byStatus ?? false)
+                        {
+                            cvsT.SortDescriptions.Add(new SortDescription("Status", ListSortDirection.Ascending));
+                            cvsT.SortDescriptions.Add(new SortDescription("Date", ListSortDirection.Ascending));
+                        }
+                        else
+                        {
+                            cvsT.SortDescriptions.Add(new SortDescription("Date", ListSortDirection.Ascending));
+                        }
+                    }
                 }
             }
+            finally
+            {
+                Mouse.OverrideCursor = null;
+            }
+
         }
 
         #region Properties

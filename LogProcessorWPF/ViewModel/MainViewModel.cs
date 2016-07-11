@@ -58,9 +58,7 @@ namespace LogProcessorWPF.ViewModel
             {
                 if (this.ObsPasses == null)
                     return;
-                //this.SortTests(value ?? false);
                 MessengerInstance.Send<bool?>(value);
-
             }
         }
 
