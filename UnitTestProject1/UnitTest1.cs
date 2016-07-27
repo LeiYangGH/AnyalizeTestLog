@@ -123,6 +123,40 @@ namespace UnitTestProject1
             }
         }
 
+        [TestMethod]
+        public void TestWriteNonEmptyLinesExactlySame()
+        {
+            string tempFile1 = Path.GetTempFileName();
+            File.WriteAllText(tempFile1, onePassTextWith2Tests);
+
+            var readProgress = new Progress<ReadProgress>();
+
+            var reader1 = new LogSubstringReader(tempFile1);
+            var task1 = reader1.ReadAndExtractPasses(readProgress);
+            IList<Pass> passes1 = task1.Result;
+
+            string tempFile2 = Path.GetTempFileName();
+            var writer = new LogWriter(tempFile2);
+            var tw = Task.Run(() => writer.SavePasses(passes1));
+            Task.WaitAll(tw);
+
+            string[] lines1 = File.ReadAllLines(tempFile1);
+            string[] lines2 = File.ReadAllLines(tempFile2);
+
+            File.Delete(tempFile1);
+            File.Delete(tempFile2);
+
+            string[] nonEmptyLines1 = lines1.Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
+            string[] nonEmptyLines2 = lines2.Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
+
+            Assert.IsTrue(nonEmptyLines1.Length > 0);
+            Assert.AreEqual<int>(nonEmptyLines1.Length, nonEmptyLines2.Length);
+            for (int i = 0; i < nonEmptyLines1.Length; i++)
+            {
+                Assert.AreEqual<string>(nonEmptyLines1[i], nonEmptyLines2[i]);
+            }
+        }
+
         static string oneEmptyPass = @"
 S:\Projects\PR\PR11274_Rev01\PR11274.obc[26-FEB-16  15:04:49
 ]26-FEB-16  18:19:06
