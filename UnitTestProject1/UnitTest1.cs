@@ -155,6 +155,12 @@ namespace UnitTestProject1
             {
                 Assert.AreEqual<string>(nonEmptyLines1[i], nonEmptyLines2[i]);
             }
+
+            int minLinesCount = lines1.Length <= lines2.Length ? lines1.Length : lines2.Length;
+            for (int i = 0; i < minLinesCount; i++)
+            {
+                Assert.AreEqual<string>(lines1[i], lines1[i]);
+            }
         }
 
         static string oneEmptyPass = @"

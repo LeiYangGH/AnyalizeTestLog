@@ -91,10 +91,10 @@ namespace LogProcessor
             if (this.HasTests)
             {
                 sb.Append(Constants.at);
-                sb.Append(string.Join(Environment.NewLine + Environment.NewLine + Constants.at, this.listTests));
+                sb.Append(string.Join(Environment.NewLine + Constants.at, this.listTests));
             }
             sb.AppendLine();
-            sb.AppendLine();
+            //sb.AppendLine();
             sb.Append(Constants.passEndString);
             sb.Append(this.EndDate);
             return sb.ToString();
