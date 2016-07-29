@@ -17,19 +17,19 @@ namespace LogProcessor
         public DateTime Date;
         public string Status;
         public string SN;
-        private string testText;
+        private string testString;
         /// <summary>
         /// 通过包含Test的文本解析出Test对象
         /// </summary>
-        /// <param name="testText">包含Test的文本</param>
-        public Test(string testText)
+        /// <param name="testString">包含Test的文本</param>
+        public Test(string testString)
         {
-            this.testText = testText.Trim();//去掉空白更保险
+            this.testString = testString.Trim();//去掉空白更保险
             this.DateString = this.ExtractDatetimeFormATest();
             this.Date = DateTime.ParseExact(this.DateString, Constants.dateFormatString,
                          CultureInfo.InvariantCulture);
             this.Status = this.ExtractStatusFormATest();
-            this.SN = this.ExtractSNFormATest();
+            this.SN = this.ExtractSNFormATest(this.testString);
         }
 
         /// <summary>
@@ -39,8 +39,7 @@ namespace LogProcessor
         private string ExtractDatetimeFormATest()
         {
             //@26-FEB-16  14:12:16
-            string dateString = this.testText.Substring(0, Constants.dateStringLenth);
-            //Debug.Assert(Constants.regFindDatetime.IsMatch(dateString));
+            string dateString = this.testString.Substring(0, Constants.dateStringLenth);
             return dateString;
         }
 
@@ -50,7 +49,7 @@ namespace LogProcessor
         /// <returns></returns>
         private string ExtractStatusFormATest()
         {
-            string trimE = this.testText.TrimEnd();
+            string trimE = this.testString.TrimEnd();
             char found = trimE[trimE.Length - Constants.statusLastIndex];
             switch (found)
             {
@@ -66,28 +65,14 @@ namespace LogProcessor
         }
 
         /// <summary>
-        /// 提取SN, static for test
+        /// 提取SN
         /// </summary>
         /// <returns></returns>
-        private string ExtractSNFormATest()
+        public string ExtractSNFormATest(string input)
         {
-            try
-            {
-                //@26-FEB-16  14:45:13 SN SS160605E
-                string line0 = this.testText.Substring(0, this.testText.IndexOf(Environment.NewLine));
-                int locSN = line0.LastIndexOf(Constants.SN);
-                string sn = "";
-                if (locSN > 0)
-                {
-                    sn = line0.Substring(locSN + 2);
-                }
-                return sn.Trim();
-            }
-            catch (Exception)
-            {
-                return "";
-            }
-
+            //@26-FEB-16  14:45:13 SN SS160605E
+            string sn = Constants.RegFindSN.Match(input).Groups[1].Value;
+            return sn;
         }
 
         /// <summary>
@@ -96,7 +81,7 @@ namespace LogProcessor
         /// <returns></returns>
         public override string ToString()
         {
-            return this.testText;
+            return this.testString;
         }
     }
 }

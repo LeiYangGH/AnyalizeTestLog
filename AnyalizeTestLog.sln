@@ -14,6 +14,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Requirements", "Requirement
 		Requirements\input0.txt = Requirements\input0.txt
 		Requirements\input1.txt = Requirements\input1.txt
 		Requirements\input1unicode.txt = Requirements\input1unicode.txt
+		Requirements\Input_BlankLines.log = Requirements\Input_BlankLines.log
 		Requirements\inputdateorder.txt = Requirements\inputdateorder.txt
 		Requirements\inputedit.txt = Requirements\inputedit.txt
 		Requirements\inputemptypass.txt = Requirements\inputemptypass.txt

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.Linq;
 namespace LogProcessor
 {
     /// <summary>
@@ -15,6 +15,7 @@ namespace LogProcessor
     {
         private ConcurrentQueue<string> queue = new ConcurrentQueue<string>();
         private string logFileName;
+        private string replaceFile;
         private long logFileTotalLinesGuess;
         private long readingLinesCount;
         private bool readCompleted = false;
@@ -29,35 +30,48 @@ namespace LogProcessor
         /// <summary>
         /// 从文本中提取Pass, 本来应该是private，public只是为了在单元测试里用
         /// </summary>
-        /// <param name="input">任意文本，在本程序中为包含（一个）[]的一段文本</param>
+        /// <param name="passString">任意文本，在本程序中为包含（一个）[]的一段文本</param>
         /// <returns></returns>
-        public Pass ExtractOnePassBySubString(string input)
+        public Pass ExtractOnePassBySubString(string passString)
         {
             Pass p = null;
 
             //[在文本中的位置
-            int passStartSymbolLoc = input.IndexOf(Constants.passStartString);
+            int passStartSymbolLoc = passString.IndexOf(Constants.passStartString);
             //]在文本中的位置
-            int passEndSymbolLoc = input.LastIndexOf(Constants.passEndString);
+            int passEndSymbolLoc = passString.LastIndexOf(Constants.passEndString);
             //中间的文本（包含多个Test）
-            string tests = input.Substring(passStartSymbolLoc + 1, passEndSymbolLoc - passStartSymbolLoc - 1);
+            string tests = passString.Substring(passStartSymbolLoc + 1, passEndSymbolLoc - passStartSymbolLoc - 1);
             //第一行包含S的文本
-            string line0S = input.Substring(0, passStartSymbolLoc);
+            string line0S = passString.Substring(0, passStartSymbolLoc);
             //开始时间文本
-            string sdt = input.Substring(passStartSymbolLoc + 1, Constants.dateStringLenth);
+            string sdt = passString.Substring(passStartSymbolLoc + 1, Constants.dateStringLenth);
             //结束时间文本
-            string edt = input.Substring(passEndSymbolLoc + 1, Constants.dateStringLenth);
+            string edt = passString.Substring(passEndSymbolLoc + 1, Constants.dateStringLenth);
             //下面两句调试用
             //Debug.Assert(passStartSymbolLoc > 0, passStartSymbolLoc.ToString());
             //Debug.Assert(passEndSymbolLoc - passStartSymbolLoc >= Constants.dateStringLenth);
             bool hasTests = passEndSymbolLoc - passStartSymbolLoc > Constants.minPassSymbolDistance;
-            p = new Pass(sdt, edt, line0S, hasTests, tests);
+            if (hasTests)
+                p = new Pass(sdt, edt, line0S, tests);
+            else
+                p = new Pass(sdt, edt, passString.TrimEnd());
             return p;
-
         }
         #endregion Extract pass-test
 
-
+        /// <summary>
+        /// 替换原有log文件的多余换行符
+        /// </summary>
+        private void Replace0dFromInputLog()
+        {
+            this.replaceFile = this.logFileName + ".Replace";
+            if (!File.Exists(this.replaceFile))
+            {
+                var all = File.ReadAllBytes(this.logFileName).Where(x => x != 0x0d).ToArray();
+                File.WriteAllBytes(this.replaceFile, all);
+            }
+        }
         /// <summary>IList<Pass>
         /// 按行读取log，遇到]则把之前读的一块拼接起来，并解析成Pass，最后返回Pass集合
         /// </summary>
@@ -66,7 +80,7 @@ namespace LogProcessor
             this.queue = new ConcurrentQueue<string>();
             StringBuilder sbLines4Pass = new StringBuilder();//用来暂存Pass字符串
             string passStr = null;
-            foreach (string line in File.ReadLines(logFileName, Encoding.UTF8))
+            foreach (string line in File.ReadLines(this.replaceFile))
             {
                 this.readingLinesCount++;
                 //根据要求保留空行
@@ -137,6 +151,8 @@ namespace LogProcessor
             this.readingLinesCount = 0;
 
             IList<Pass> lstPasses = null;
+
+            this.Replace0dFromInputLog();
 
             await Task.Run(() =>
             {
