@@ -51,7 +51,7 @@ namespace LogProcessor
             //下面两句调试用
             //Debug.Assert(passStartSymbolLoc > 0, passStartSymbolLoc.ToString());
             //Debug.Assert(passEndSymbolLoc - passStartSymbolLoc >= Constants.dateStringLenth);
-            bool hasTests = passEndSymbolLoc - passStartSymbolLoc > Constants.minPassSymbolDistance;
+            bool hasTests = tests.Contains(Constants.at);
             if (hasTests)
                 p = new Pass(sdt, edt, line0S, tests);
             else
