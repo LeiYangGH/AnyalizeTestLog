@@ -87,14 +87,11 @@ namespace LogProcessor
         {
             get
             {
-                if (this.clone == null)
-                {
-                    this.clone = new Pass(this.HasTests);
-                    clone.Line0S = this.Line0S;
-                    clone.passString = this.passString;
-                    clone.StartDateString = this.StartDateString;
-                    clone.EndDate = this.EndDate;
-                }
+                this.clone = new Pass(this.HasTests);
+                clone.Line0S = this.Line0S;
+                clone.passString = this.passString;
+                clone.StartDateString = this.StartDateString;
+                clone.EndDate = this.EndDate;
                 return this.clone;
             }
         }

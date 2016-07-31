@@ -22,7 +22,11 @@ namespace LogProcessorWPF.ViewModel
             MessengerInstance.Register<TestViewModel>(this, (t) =>
             {
                 if (this.ObsTests.Contains(t))
+                {
+                    this.isChecked = this.ObsTests.Any(x => x.IsChecked ?? false);
+                    this.RaisePropertyChanged(() => this.IsChecked);
                     this.RaisePropertyChanged(() => this.TestsCntMsg);
+                }
             });
         }
 
@@ -80,7 +84,8 @@ namespace LogProcessorWPF.ViewModel
                     this.RaisePropertyChanged(() => this.IsChecked);
                     this.RaisePropertyChanged(() => this.TestsCntMsg);
                     if (this.ObsTests != null)
-                        foreach (TestViewModel t in this.ObsTests)
+                        foreach (TestViewModel t in this.ObsTests
+                            .Where(t => t.IsChecked != value))
                         {
                             t.IsChecked = value;
                         }
