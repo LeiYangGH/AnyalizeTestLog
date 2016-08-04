@@ -118,7 +118,7 @@ namespace LogProcessor
             }
             else
             {
-                return this.passString;
+                return this.passString.TrimEnd();
             }
         }
     }
