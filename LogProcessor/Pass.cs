@@ -111,7 +111,7 @@ namespace LogProcessor
                 sb.Append(Constants.passStartString);
                 sb.AppendLine(this.StartDateString);
                 sb.Append(Constants.at);
-                sb.AppendLine(string.Join(Environment.NewLine + Constants.at, this.listTests));
+                sb.Append(string.Join(Constants.at, this.listTests));
                 sb.Append(Constants.passEndString);
                 sb.Append(this.EndDate);
                 return sb.ToString();

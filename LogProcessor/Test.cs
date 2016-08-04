@@ -24,7 +24,7 @@ namespace LogProcessor
         /// <param name="testString">包含Test的文本</param>
         public Test(string testString)
         {
-            this.testString = testString.Trim();//去掉空白更保险
+            this.testString = testString;
             this.DateString = this.ExtractDatetimeFormATest();
             this.Date = DateTime.ParseExact(this.DateString, Constants.dateFormatString,
                          CultureInfo.InvariantCulture);
@@ -49,15 +49,14 @@ namespace LogProcessor
         /// <returns></returns>
         private string ExtractStatusFormATest()
         {
-            string trimE = this.testString.TrimEnd();
-            char found = trimE[trimE.Length - Constants.statusLastIndex];
-            switch (found)
+            string statusSymbolString = Constants.RegExtractStatus.Match(this.testString).Groups[1].Value;
+            switch (statusSymbolString)
             {
-                case '\"':
+                case @"""":
                     return Constants.passCharString;
-                case '?':
+                case @"?":
                     return Constants.errorCharString;
-                case '/':
+                case @"/":
                     return Constants.failCharString;
                 default:
                     return "";
@@ -71,7 +70,7 @@ namespace LogProcessor
         public string ExtractSNFormATest(string input)
         {
             //@26-FEB-16  14:45:13 SN SS160605E
-            string sn = Constants.RegFindSN.Match(input).Groups[1].Value;
+            string sn = Constants.RegExtractSN.Match(input).Groups[1].Value;
             return sn;
         }
 

@@ -21,8 +21,10 @@ namespace LogProcessor
         public const string SN = @"SN";
         public const string dateFormatString = @"dd-MMM-yy  HH:mm:ss";
         public const string logExtFilter = @"log|*.log|txt|*.txt";
-        public const string DateFormatString = @"[0-3]\d-(?:JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC)-1[67]  [012]\d:[0-5]\d:[0-5]\d";
-        public static string strRegExtractSN = string.Format(@"{0} SN ([A-Z\d]+)\b", DateFormatString);
-        public static Regex RegFindSN = new Regex(strRegExtractSN);
+        public const string dateRegString = @"[0-3]\d-(?:JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC)-1[67]  [012]\d:[0-5]\d:[0-5]\d";
+        public static string strRegExtractStatus = string.Format(@"([""?/]){0}", dateRegString);
+        public static string strRegExtractSN = string.Format(@"{0} SN ([A-Z\d]+)\b", dateRegString);
+        public static Regex RegExtractSN = new Regex(strRegExtractSN, RegexOptions.Compiled);
+        public static Regex RegExtractStatus = new Regex(strRegExtractStatus, RegexOptions.Compiled);
     }
 }

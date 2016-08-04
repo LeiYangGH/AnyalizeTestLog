@@ -15,7 +15,6 @@ namespace LogProcessor
     {
         private ConcurrentQueue<string> queue = new ConcurrentQueue<string>();
         private string logFileName;
-        private string replaceFile;
         private long logFileTotalLinesGuess;
         private long readingLinesCount;
         private bool readCompleted = false;
@@ -55,23 +54,11 @@ namespace LogProcessor
             if (hasTests)
                 p = new Pass(sdt, edt, line0S, tests);
             else
-                p = new Pass(sdt, edt, passString.TrimEnd());
+                p = new Pass(sdt, edt, passString);
             return p;
         }
         #endregion Extract pass-test
 
-        /// <summary>
-        /// 替换原有log文件的多余换行符
-        /// </summary>
-        private void Replace0dFromInputLog()
-        {
-            this.replaceFile = this.logFileName + ".Replace";
-            if (!File.Exists(this.replaceFile))
-            {
-                var all = File.ReadAllBytes(this.logFileName).Where(x => x != 0x0d).ToArray();
-                File.WriteAllBytes(this.replaceFile, all);
-            }
-        }
         /// <summary>IList<Pass>
         /// 按行读取log，遇到]则把之前读的一块拼接起来，并解析成Pass，最后返回Pass集合
         /// </summary>
@@ -80,13 +67,14 @@ namespace LogProcessor
             this.queue = new ConcurrentQueue<string>();
             StringBuilder sbLines4Pass = new StringBuilder();//用来暂存Pass字符串
             string passStr = null;
-            foreach (string line in File.ReadLines(this.replaceFile))
+            string allLogString = File.ReadAllText(this.logFileName);
+            foreach (string line in allLogString.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries))
             {
                 this.readingLinesCount++;
                 //根据要求保留空行
                 //if (string.IsNullOrWhiteSpace(line))
                 //    continue;
-                sbLines4Pass.AppendLine(line);
+                sbLines4Pass.Append(line);
                 if (line.Contains(Constants.passEndString))//如果这行包含了]
                 {
                     passStr = sbLines4Pass.ToString();
@@ -151,8 +139,6 @@ namespace LogProcessor
             this.readingLinesCount = 0;
 
             IList<Pass> lstPasses = null;
-
-            this.Replace0dFromInputLog();
 
             await Task.Run(() =>
             {

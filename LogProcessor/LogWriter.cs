@@ -28,7 +28,7 @@ namespace LogProcessor
                 var lines = lstPasses.Select(p => p.ToString());
                 await Task.Run(() =>
                 {
-                    File.WriteAllLines(saveFileName, lines, Encoding.UTF8);
+                    File.WriteAllText(saveFileName, string.Join("", lines));
                 });
             }
             catch (Exception ex)
