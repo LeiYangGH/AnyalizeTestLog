@@ -51,16 +51,6 @@ namespace UnitTestProject1
         }
 
         [TestMethod]
-        public void TestExtractEmptyPassFromInput()
-        {
-            var reader = new LogSubstringReader("");
-            Pass pass = reader.ExtractOnePassBySubString(oneEmptyPass);
-            Assert.AreEqual("26-FEB-16  15:04:49", pass.StartDateString);
-            Assert.AreEqual("26-FEB-16  18:19:06", pass.EndDate);
-            Assert.AreEqual(0, pass.listTests.Count);
-        }
-
-        [TestMethod]
         public void TestExtractOnePassFromInput()
         {
             var reader = new LogSubstringReader("");

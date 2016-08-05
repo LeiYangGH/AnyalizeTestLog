@@ -15,11 +15,9 @@ namespace LogProcessor
     /// </summary>
     public class Pass
     {
-        private string passString;
         private string Line0S;
         public string StartDateString;
         public string EndDate;
-        public readonly bool HasTests;
 
         public List<Test> listTests = new List<Test>();
         public DateTime StartDate;//用来排序的时间
@@ -27,26 +25,11 @@ namespace LogProcessor
         /// <summary>
         /// 只在保存时候用
         /// </summary>
-        private Pass(bool hasTests)
+        private Pass()
         {
-            this.HasTests = hasTests;
         }
 
-        /// <summary>
-        /// 传进来空Pass
-        /// </summary>
-        /// <param name="sdt">开始日期文本</param>
-        /// <param name="edt">结束日期文本</param>
-        /// <param name="passString">整个passString</param>
-        public Pass(string sdt, string edt, string passString)
-        {
-            this.passString = passString;
-            this.StartDateString = sdt;
-            this.EndDate = edt;
-            this.StartDate = DateTime.ParseExact(this.StartDateString,
-                Constants.dateFormatString, CultureInfo.InvariantCulture);
-            this.HasTests = false;
-        }
+
 
         ///// <summary>
         ///// 
@@ -70,7 +53,6 @@ namespace LogProcessor
             this.EndDate = edt;
             this.StartDate = DateTime.ParseExact(this.StartDateString,
                 Constants.dateFormatString, CultureInfo.InvariantCulture);
-            this.HasTests = true;
             //使用@拆分出各个Pass
             this.listTests = testsString.Split(new string[] { Constants.at },
                 StringSplitOptions.RemoveEmptyEntries)
@@ -87,9 +69,8 @@ namespace LogProcessor
         {
             get
             {
-                this.clone = new Pass(this.HasTests);
+                this.clone = new Pass();
                 clone.Line0S = this.Line0S;
-                clone.passString = this.passString;
                 clone.StartDateString = this.StartDateString;
                 clone.EndDate = this.EndDate;
                 return this.clone;
@@ -104,22 +85,15 @@ namespace LogProcessor
         /// <returns></returns>
         public override string ToString()
         {
-            if (this.HasTests)
-            {
-                StringBuilder sb = new StringBuilder();
-                sb.Append(this.Line0S);
-                sb.Append(Constants.passStartString);
-                sb.AppendLine(this.StartDateString);
-                sb.Append(Constants.at);
-                sb.Append(string.Join(Constants.at, this.listTests));
-                sb.Append(Constants.passEndString);
-                sb.Append(this.EndDate);
-                return sb.ToString();
-            }
-            else
-            {
-                return this.passString.TrimEnd();
-            }
+            StringBuilder sb = new StringBuilder();
+            sb.Append(this.Line0S);
+            sb.Append(Constants.passStartString);
+            sb.AppendLine(this.StartDateString);
+            sb.Append(Constants.at);
+            sb.Append(string.Join(Constants.at, this.listTests));
+            sb.Append(Constants.passEndString);
+            sb.Append(this.EndDate);
+            return sb.ToString();
         }
     }
 }

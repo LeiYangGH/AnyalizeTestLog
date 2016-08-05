@@ -18,7 +18,6 @@ namespace LogProcessorWPF.ViewModel
             this.StartDate = pass.StartDate;
             this.EndDate = pass.EndDate;
             this.ConstructObsTests();
-            this.HasTests = this.ObsTests.Count > 0;
             MessengerInstance.Register<TestViewModel>(this, (t) =>
             {
                 if (this.ObsTests.Contains(t))
@@ -44,10 +43,9 @@ namespace LogProcessorWPF.ViewModel
             get
             {
                 Pass clone = this.pass.PassClonedWithBasicProperties;
-                if (clone.HasTests)
-                    clone.listTests = this.ObsTests
-                        .Where(t => t.IsChecked ?? false)
-                        .Select(x => x.test).ToList();
+                clone.listTests = this.ObsTests
+                    .Where(t => t.IsChecked ?? false)
+                    .Select(x => x.test).ToList();
                 return clone;
             }
         }
@@ -155,12 +153,6 @@ namespace LogProcessorWPF.ViewModel
                     this.RaisePropertyChanged(() => this.EndDate);
                 }
             }
-        }
-
-        public bool HasTests
-        {
-            get;
-            set;
         }
     }
 }

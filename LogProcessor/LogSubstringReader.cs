@@ -51,10 +51,7 @@ namespace LogProcessor
             //Debug.Assert(passStartSymbolLoc > 0, passStartSymbolLoc.ToString());
             //Debug.Assert(passEndSymbolLoc - passStartSymbolLoc >= Constants.dateStringLenth);
             bool hasTests = tests.Contains(Constants.at);
-            if (hasTests)
-                p = new Pass(sdt, edt, line0S, tests);
-            else
-                p = new Pass(sdt, edt, passString);
+            p = new Pass(sdt, edt, line0S, tests);
             return p;
         }
         #endregion Extract pass-test
@@ -78,7 +75,8 @@ namespace LogProcessor
                 if (line.Contains(Constants.passEndString))//如果这行包含了]
                 {
                     passStr = sbLines4Pass.ToString();
-                    if (passStr.Contains(Constants.passStartString))//log文件有不严格的[]匹配
+                    if (passStr.Contains(Constants.at) && //过滤掉空Pass
+                        passStr.Contains(Constants.passStartString))//log文件有不严格的[]匹配
                         queue.Enqueue(passStr);
                     sbLines4Pass.Clear();
                     if (progress != null)
@@ -88,6 +86,8 @@ namespace LogProcessor
                     }
                 }
             }
+            var rDoneprogress = new ReadProgress(this.logFileTotalLinesGuess, this.logFileTotalLinesGuess);
+            progress.Report(rDoneprogress);
             this.readCompleted = true;
         }
 
