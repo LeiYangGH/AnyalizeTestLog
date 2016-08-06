@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
 
 namespace LogProcessor
 {
@@ -44,12 +39,13 @@ namespace LogProcessor
         }
 
         /// <summary>
-        /// 提取状态并转换为显示字符
+        /// 正则提取状态并转换为显示字符，使用正则可有效避免其他位置的/符号的干扰
         /// </summary>
         /// <returns></returns>
         private string ExtractStatusFormATest()
         {
-            string statusSymbolString = Constants.RegExtractStatus.Match(this.testString).Groups[1].Value;
+            string statusSymbolString = Constants.RegExtractStatus
+                .Match(this.testString).Groups[1].Value;
             switch (statusSymbolString)
             {
                 case @"""":
@@ -64,7 +60,7 @@ namespace LogProcessor
         }
 
         /// <summary>
-        /// 提取SN
+        /// 正则提取SN
         /// </summary>
         /// <returns></returns>
         public string ExtractSNFormATest(string input)

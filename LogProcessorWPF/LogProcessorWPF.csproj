@@ -74,7 +74,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Converters\PassChildrenCntForgroundConverter.cs" />
     <Compile Include="Converters\StatusConverter.cs" />
     <Compile Include="Converters\StatusOrderByConverter.cs" />
     <Compile Include="Properties\Settings.Designer.cs">

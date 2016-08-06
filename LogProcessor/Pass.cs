@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace LogProcessor
 {
@@ -29,16 +25,6 @@ namespace LogProcessor
         {
         }
 
-
-
-        ///// <summary>
-        ///// 
-        ///// </summary>
-        ///// <param name="testsText">包含若干Tests的那段文本</param>
-        ///// <param name="sdt">开始日期文本</param>
-        ///// <param name="edt">结束日期文本</param>
-        ///// 
-        /////
         /// <summary>
         /// 根据传进来的一段文本解析Pass
         /// </summary>

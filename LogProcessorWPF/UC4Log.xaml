@@ -13,7 +13,6 @@
     <UserControl.Resources>
         <cvt:StatusConverter x:Key="StatusCvt"/>
         <cvt:StatusOrderByConverter x:Key="StatusOrderCvt"/>
-        <cvt:PassChildrenCntForgroundConverter x:Key="PassForCvt"/>
         <Style x:Key="TblockCenter" TargetType="TextBlock">
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -32,7 +31,6 @@
         <Style x:Key="PassTbStyle" TargetType="TextBlock" BasedOn="{StaticResource TblockCenter}">
             <Setter Property="FontSize" Value="12"/>
             <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="Foreground" Value="{Binding HasTests, Converter={StaticResource PassForCvt}, Mode=OneTime}"/>
         </Style>
 
         <Style   TargetType="ListViewItem">
@@ -141,7 +139,6 @@
                                             <ColumnDefinition/>
                                         </Grid.ColumnDefinitions>
                                         <CheckBox Grid.Column="0"  ToolTip="Keep when save"
-                                                  Foreground="{Binding HasTests, Converter={StaticResource PassForCvt}, Mode=OneTime}"
                                                   HorizontalAlignment="Left"  VerticalAlignment="Center"
                 IsChecked="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged}" Margin="0"/>
                                         <TextBlock Grid.Column="1"  Text="{Binding TestsCntMsg,Mode=OneWay}" ToolTip="{Binding TestsCntMsg,Mode=OneWay}" Style="{StaticResource PassTbStyle}"/>

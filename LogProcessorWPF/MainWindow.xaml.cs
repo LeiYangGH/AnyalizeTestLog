@@ -125,10 +125,6 @@ namespace LogProcessorWPF
             }
 
         }
-
-        #region Properties
-
-        #endregion Properties
     }
 
 }

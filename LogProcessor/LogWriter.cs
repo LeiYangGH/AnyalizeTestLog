@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace LogProcessor
@@ -19,13 +18,13 @@ namespace LogProcessor
         /// 保存（勾选的）Pass集合。
         /// 在调用时候传进来的是已经剔除未勾选的
         /// </summary>
-        /// <param name="lstPasses"></param>
+        /// <param name="lstChechkedPasses">勾选的Pass集合</param>
         /// <returns>文件名或错误消息</returns>
-        public async Task<string> SavePasses(IEnumerable<Pass> lstPasses)
+        public async Task<string> SavePasses(IEnumerable<Pass> lstChechkedPasses)
         {
             try
             {
-                var lines = lstPasses.Select(p => p.ToString());
+                var lines = lstChechkedPasses.Select(p => p.ToString());
                 await Task.Run(() =>
                 {
                     File.WriteAllLines(saveFileName, lines);

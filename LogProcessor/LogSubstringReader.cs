@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
-using System.Linq;
 namespace LogProcessor
 {
     /// <summary>
@@ -33,8 +32,6 @@ namespace LogProcessor
         /// <returns></returns>
         public Pass ExtractOnePassBySubString(string passString)
         {
-            Pass p = null;
-
             //[在文本中的位置
             int passStartSymbolLoc = passString.IndexOf(Constants.passStartString);
             //]在文本中的位置
@@ -47,12 +44,8 @@ namespace LogProcessor
             string sdt = passString.Substring(passStartSymbolLoc + 1, Constants.dateStringLenth);
             //结束时间文本
             string edt = passString.Substring(passEndSymbolLoc + 1, Constants.dateStringLenth);
-            //下面两句调试用
-            //Debug.Assert(passStartSymbolLoc > 0, passStartSymbolLoc.ToString());
-            //Debug.Assert(passEndSymbolLoc - passStartSymbolLoc >= Constants.dateStringLenth);
-            bool hasTests = tests.Contains(Constants.at);
-            p = new Pass(sdt, edt, line0S, tests);
-            return p;
+            Pass pass = new Pass(sdt, edt, line0S, tests);
+            return pass;
         }
         #endregion Extract pass-test
 
@@ -64,8 +57,11 @@ namespace LogProcessor
             this.queue = new ConcurrentQueue<string>();
             StringBuilder sbLines4Pass = new StringBuilder();//用来暂存Pass字符串
             string passStr = null;
+            //先读整个文件内容到内存一个巨大的String里面
             string allLogString = File.ReadAllText(this.logFileName);
-            foreach (string line in allLogString.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries))
+            //然后按换行符拆分成行
+            foreach (string line in allLogString
+                .Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries))
             {
                 this.readingLinesCount++;
                 //根据要求保留空行
@@ -86,6 +82,7 @@ namespace LogProcessor
                     }
                 }
             }
+            //读完后显示100进度，否则如果全是空Pass最后进度条就显示不完
             var rDoneprogress = new ReadProgress(this.logFileTotalLinesGuess, this.logFileTotalLinesGuess);
             progress.Report(rDoneprogress);
             this.readCompleted = true;
@@ -122,13 +119,11 @@ namespace LogProcessor
 
         #region private methords
         /// 估算文件行数
-
         private long GuessLogFileLineCount()
         {
             long len = new FileInfo(logFileName).Length;
             return (long)(len / Constants.fileLenth2LinesRate);
         }
-
         #endregion private methords
 
 
