@@ -12,6 +12,7 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
         <cvt:StatusConverter x:Key="StatusCvt"/>
+        <cvt:Status2WordConverter x:Key="Status2WordCvt"/>
         <cvt:StatusOrderByConverter x:Key="StatusOrderCvt"/>
         <Style x:Key="TblockCenter" TargetType="TextBlock">
             <Setter Property="VerticalAlignment" Value="Center"/>
@@ -54,9 +55,7 @@
                           IsChecked="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged}"  />
                 <TextBlock Grid.Column="2" Style="{StaticResource TblockCenter}" 
                            Text="{Binding DateString,Mode=OneTime}" />
-                <TextBlock Grid.Column="4" Text="{Binding Status,Mode=OneTime}" 
-                           FontWeight="Bold" Style="{StaticResource TblockCenter}"
-                           Foreground="{Binding Status, Converter={StaticResource StatusCvt}, Mode=OneTime}" />
+
                 <TextBlock Grid.Column="5" Text="{Binding SN,Mode=OneTime}" Style="{StaticResource TblockCenter}" />
                 <TextBlock Grid.Column="6"  ToolTip="Open its original text in a new window." Style="{StaticResource TblockCenter}">
                 <Hyperlink  Command="{Binding ShowDetailsCommand, Mode=OneTime}">
@@ -120,44 +119,61 @@
                               VirtualizingPanel.IsVirtualizing="True">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate DataType="vm:PassViewModel">
-                            <Expander x:Name="exp" IsExpanded="True" >
-                                <Expander.Resources>
-                                    <CollectionViewSource x:Key="cvsT" 
+                            <Border BorderBrush="LightBlue" BorderThickness="1" Margin="1,3" Padding="1">
+                                <Expander x:Name="exp" IsExpanded="True" >
+                                    <Expander.Resources>
+                                        <CollectionViewSource x:Key="cvsT" 
                                 Source="{Binding ObsTests,Mode=OneTime, IsAsync=True}">
-                                        <CollectionViewSource.SortDescriptions>
-                                            <scm:SortDescription PropertyName="Date"/>
-                                        </CollectionViewSource.SortDescriptions>
-                                    </CollectionViewSource>
-                                </Expander.Resources>
-                                <Expander.Header>
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="16"/>
-                                            <ColumnDefinition Width="40"/>
-                                            <ColumnDefinition Width="150"/>
-                                            <ColumnDefinition Width="150"/>
-                                            <ColumnDefinition/>
-                                        </Grid.ColumnDefinitions>
-                                        <CheckBox Grid.Column="0"  ToolTip="Keep when save"
+                                            <CollectionViewSource.SortDescriptions>
+                                                <scm:SortDescription PropertyName="Date"/>
+                                            </CollectionViewSource.SortDescriptions>
+                                            <CollectionViewSource.GroupDescriptions>
+                                                <PropertyGroupDescription PropertyName="Status" />
+                                            </CollectionViewSource.GroupDescriptions>
+                                        </CollectionViewSource>
+                                    </Expander.Resources>
+                                    <Expander.Header>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="16"/>
+                                                <ColumnDefinition Width="40"/>
+                                                <ColumnDefinition Width="150"/>
+                                                <ColumnDefinition Width="150"/>
+                                                <ColumnDefinition/>
+                                            </Grid.ColumnDefinitions>
+                                            <CheckBox Grid.Column="0"  ToolTip="Keep when save"
                                                   HorizontalAlignment="Left"  VerticalAlignment="Center"
                 IsChecked="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged}" Margin="0"/>
-                                        <TextBlock Grid.Column="1"  Text="{Binding TestsCntMsg,Mode=OneWay}" ToolTip="{Binding TestsCntMsg,Mode=OneWay}" Style="{StaticResource PassTbStyle}"/>
-                                        <TextBlock Grid.Column="2"  Text="{Binding StartDateString, Mode=OneTime}" Style="{StaticResource PassTbStyle}"/>
-                                        <TextBlock Grid.Column="3"  Text="{Binding EndDate, Mode=OneTime}" Style="{StaticResource PassTbStyle}"/>
+                                            <TextBlock Grid.Column="1"  Text="{Binding TestsCntMsg,Mode=OneWay}" ToolTip="{Binding TestsCntMsg,Mode=OneWay}" Style="{StaticResource PassTbStyle}"/>
+                                            <TextBlock Grid.Column="2"  Text="{Binding StartDateString, Mode=OneTime}" Style="{StaticResource PassTbStyle}"/>
+                                            <TextBlock Grid.Column="3"  Text="{Binding EndDate, Mode=OneTime}" Style="{StaticResource PassTbStyle}"/>
 
-                                    </Grid>
-                                </Expander.Header>
-                                <Expander.Content>
-
-                                    <ItemsControl ItemsSource="{Binding Source={StaticResource cvsT}, Mode=OneTime, IsAsync=True}" Margin="2"
+                                        </Grid>
+                                    </Expander.Header>
+                                    <Expander.Content>
+                                        <ItemsControl ItemsSource="{Binding Source={StaticResource cvsT}, Mode=OneTime, IsAsync=True}" Margin="2"
                                              Focusable="False" ItemTemplate="{StaticResource TestTemplate}"
                                           >
-                                        <i:Interaction.Behaviors>
-                                            <log:BubbleScrollEvent />
-                                        </i:Interaction.Behaviors>
-                                    </ItemsControl>
-                                </Expander.Content>
-                            </Expander>
+                                            <ItemsControl.GroupStyle>
+                                                <GroupStyle>
+                                                    <GroupStyle.HeaderTemplate>
+                                                        <DataTemplate>
+                                                            <Grid Background="LightBlue">
+                                                                <TextBlock  
+                                                          FontWeight="Bold"  Style="{StaticResource TblockCenter}"
+                         Text="{Binding Path=Name, Converter={StaticResource Status2WordCvt}, Mode=OneTime}"
+                                                            Foreground="{Binding Name, Converter={StaticResource StatusCvt}, Mode=OneTime}"/>
+                                                            </Grid>
+
+                                                        </DataTemplate>
+                                                    </GroupStyle.HeaderTemplate>
+                                                </GroupStyle>
+                                            </ItemsControl.GroupStyle>
+                                        </ItemsControl>
+                                    </Expander.Content>
+                                </Expander>
+                            </Border>
+
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
